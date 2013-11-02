@@ -339,7 +339,7 @@ namespace RayTraceBenchmark
 	// ==============================================
 	// Prep Code
 	// ==============================================
-	#if WIN8
+	#if WIN8 || WP8
 	static class Console
 	{
 		public delegate void WriteLineCallbackMethod(string value);
@@ -351,6 +351,7 @@ namespace RayTraceBenchmark
 		}
 	}
 
+	#if !WP8
 	static class Thread
 	{
 		public static void Sleep(int milli)
@@ -361,6 +362,7 @@ namespace RayTraceBenchmark
 			}
 		}
 	}
+	#endif
 	#endif
 
 	static class BenchmarkMain
@@ -407,7 +409,7 @@ namespace RayTraceBenchmark
 		}
 		#endif
 
-		#if WIN8
+		#if WIN8 || WP8
 		public delegate void SaveImageCallbackMethod(byte[] data);
 		public static SaveImageCallbackMethod SaveImageCallback;
 		#else
@@ -454,7 +456,7 @@ namespace RayTraceBenchmark
 			#endif
 
 			// save image
-			#if WIN8
+			#if WIN8 || WP8
 			if (SaveImageCallback != null) SaveImageCallback(data);
 			#else
 			Console.ReadLine();
@@ -475,6 +477,21 @@ namespace RayTraceBenchmark
 				rgba[i2+1] = rgb[i+1];
 				rgba[i2+2] = rgb[i];
 				rgba[i2+3] = 255;
+			}
+
+			return rgba;
+		}
+
+		public static int[] ConvertRGBToBGRAInt(byte[] rgb)
+		{
+			var rgba = new int[rgb.Length/3];
+			for (int i = 0, i2 = 0; i != rgb.Length; i += 3, i2 += 1)
+			{
+				int color = rgb[i+2];
+				color |= rgb[i+1] << 8;
+				color |= rgb[i] << 16;
+				color |= 255 << 24;
+				rgba[i2] = color;
 			}
 
 			return rgba;

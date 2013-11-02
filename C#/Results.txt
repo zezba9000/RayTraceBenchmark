@@ -31,3 +31,8 @@ Mono 3.2.3 (Win7-Win32)
 Mono 3.2.3 (OSX 10.9)
 (x86) = 1.675 sec
 (x64) = 1.679 sec
+
+
+<<< WP8 NOKIA Lumia 822 >>>
+.NET 4.5 (WP8-WinRT)
+(ARM) 4.08 sec
