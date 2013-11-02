@@ -1,0 +1,29 @@
+<<< AMD Athlon 64 X2 Dual Core 4600+ 2.40GHz >>>
+.NET 4.5 (Win8-Win32)
+(x86) = 1.179 sec
+(x64) = 1.549 sec
+
+Mono 3.2.3 (Win8-Win32)
+(x86) = 2.059 sec
+(x64) = 2.07 sec
+
+Mono 3.2.3 (PC-Linux)
+(x86) = 2.425
+(x64) = 2.409
+
+Mono 3.2.1 (PC-BSD)
+(x86) = 2.536
+(x64) = 2.509
+
+<<< Intel Core2 Duo P8600 2.40GHz >>>
+.NET 4.5 (Win7-Win32)
+(x86) = 1.05 sec
+(x64) = 1.132 sec
+
+Mono 3.2.3 (Win7-Win32) 
+(x86) = 1.692 sec
+(x64) = 1.702 sec
+
+Mono 3.2.3 (OSX 10.9)
+(x86) = 1.675 sec
+(x64) = 1.679 sec
