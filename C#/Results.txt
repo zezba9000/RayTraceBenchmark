@@ -15,6 +15,10 @@ Mono 3.2.1 (PC-BSD)
 (x86) = 2.536
 (x64) = 2.509
 
+.NET 4.5.1 (Win8-WinRT)
+(x86) = 1.181 sec
+(x64) = 1.569 sec
+
 <<< Intel Core2 Duo P8600 2.40GHz >>>
 .NET 4.5 (Win7-Win32)
 (x86) = 1.05 sec

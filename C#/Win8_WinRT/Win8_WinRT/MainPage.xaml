@@ -1,0 +1,15 @@
+﻿<Page
+    x:Class="Win8_WinRT.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Win8_WinRT"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Image Name="image" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"/>
+		<TextBlock Name="secText" FontSize="64" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" Text="Sec: 0" VerticalAlignment="Top"/>
+		<Button Content="Start Test" HorizontalAlignment="Right" Margin="0,0,7,7" VerticalAlignment="Bottom" Click="Button_Click"/>
+	</Grid>
+</Page>
