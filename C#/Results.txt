@@ -60,6 +60,25 @@ Xamarin.Android 4.8.3 (Android 4.0)
 (ARMv7) 9.243 sec
 
 
+<<< DroidX 1GHz >>>
+Xamarin.Android 4.8.3 (Android 2.3.4)
+(ARMv7) 23.771 sec
+
+
+<<< Samsung SPH-M820-BST 800MHz >>>
+Xamarin.Android 4.8.3 (Android 2.3.6)
+(ARMv6) 257.975 sec
+
+<<< LG VM670 600MHz >>>
+Xamarin.Android 4.8.3 (Android 2.2.1)
+(ARMv6) 359.878 sec
+
+
+<<< Ouya 1GHz >>>
+Xamarin.Android 4.8.3 (Android 4.1)
+(ARMv7) 5.7 sec
+
+
 <<< iPad Mini >>>
 Xamarin.iOS 7.0.2.7 (iOS 7.0.3 [LLVM=No])
 (ARMv7) 9.308 sec
