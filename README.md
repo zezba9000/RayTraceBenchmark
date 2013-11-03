@@ -2,6 +2,7 @@ RayTraceBenchmark
 =================
 
 A benchmark for testing the performance of different languages while rendering a ray-traced world.
+
 Code originally ported from: http://forum.dlang.org/thread/yzsqwejxqlnzryhrkfuq@forum.dlang.org#post-yzsqwejxqlnzryhrkfuq:40forum.dlang.org
 
 
