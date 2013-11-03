@@ -334,7 +334,7 @@ namespace RayTraceBenchmark
 	// ==============================================
 	// Prep Code
 	// ==============================================
-	#if WIN8 || WP8 || WP7 || ANDROID
+	#if WIN8 || WP8 || WP7 || ANDROID || IOS
 	static class Console
 	{
 		public delegate void WriteLineCallbackMethod(string value);
@@ -346,7 +346,7 @@ namespace RayTraceBenchmark
 		}
 	}
 
-	#if !WP8 && !WP7 && !ANDROID
+	#if !WP8 && !WP7 && !ANDROID && !IOS
 	static class Thread
 	{
 		public static void Sleep(int milli)
@@ -404,7 +404,7 @@ namespace RayTraceBenchmark
 		}
 		#endif
 
-		#if WIN8 || WP8 || WP7 || ANDROID
+		#if WIN8 || WP8 || WP7 || ANDROID || IOS
 		public delegate void SaveImageCallbackMethod(byte[] data);
 		public static SaveImageCallbackMethod SaveImageCallback;
 		#else
@@ -453,7 +453,7 @@ namespace RayTraceBenchmark
 			#endif
 
 			// save image
-			#if WIN8 || WP8 || WP7 || ANDROID
+			#if WIN8 || WP8 || WP7 || ANDROID || IOS
 			if (SaveImageCallback != null) SaveImageCallback(data);
 			#else
 			Console.ReadLine();

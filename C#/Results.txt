@@ -58,3 +58,11 @@ Mono 2.10.8.1 (Ubuntu 13.10)
 <<< Acer A500 1GHz >>>
 Xamarin.Android 4.8.3 (Android 4.0)
 (ARMv7) 9.243 sec
+
+
+<<< iPad Mini >>>
+Xamarin.iOS 7.0.2.7 (iOS 7.0.3 [LLVM=No])
+(ARMv7) 9.308 sec
+
+Xamarin.iOS 7.0.2.7 (iOS 7.0.3 [LLVM=Yes])
+(ARMv7) 8.708 sec
