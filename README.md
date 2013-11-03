@@ -11,3 +11,7 @@ The RAW image resolution is 1280x720.
 C# Results:
 ---
 https://github.com/zezba9000/RayTraceBenchmark/blob/master/C%23/Results.md
+
+Nimrod Results:
+---
+https://github.com/zezba9000/RayTraceBenchmark/blob/master/Nimrod/Results.md
