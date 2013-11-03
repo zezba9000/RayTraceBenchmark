@@ -1,6 +1,13 @@
 C# Results
 ===
 
+AMD Phenom II X4 920 2.8Ghz
+---
+Mono 3.2.3 (Arch Linux)
+(x86) = 2.24 sec
+(x64) = 2.239 sec
+
+
 AMD Athlon 64 X2 Dual Core 4600+ 2.40GHz
 ---
 .NET 4.5 (Win8-Win32)
