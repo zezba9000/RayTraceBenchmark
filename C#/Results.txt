@@ -55,6 +55,11 @@ Mono ?? (PSM)
 (ARMv6) 41.787 sec
 
 
+<<< Ouya 1GHz >>>
+Xamarin.Android 4.8.3 (Android 4.1)
+(ARMv7) 5.7 sec
+
+
 <<< WP8 NOKIA Lumia 822 1.5GHz >>>
 .NET 4.5 (WP8-WinRT)
 (ARMv7) 4.08 sec
@@ -82,11 +87,6 @@ Xamarin.Android 4.8.3 (Android 2.3.6)
 <<< LG VM670 600MHz >>>
 Xamarin.Android 4.8.3 (Android 2.2.1)
 (ARMv6) 359.878 sec
-
-
-<<< Ouya 1GHz >>>
-Xamarin.Android 4.8.3 (Android 4.1)
-(ARMv7) 5.7 sec
 
 
 <<< iPad Mini >>>
