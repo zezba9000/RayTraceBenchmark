@@ -53,3 +53,8 @@ Mono 2.10.8.1 (Ubuntu 13.10)
 <<< WP7 Samsung SGH-i917 1GHz >>>
 .NET 4.x (WP7-Silverlight)
 (ARMv7) 14.856 sec
+
+
+<<< Acer A500 1GHz >>>
+Xamarin.Android 4.8.3 (Android 4.0)
+(ARMv7) 9.243 sec

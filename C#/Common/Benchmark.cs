@@ -142,10 +142,6 @@ namespace RayTraceBenchmark
 			if (b2 > r2)            // perpendicular > r
 				return false;
 
-			var c = (float)Math.Sqrt(r2 - b2);
-			var near = a - c;
-			var far  = a + c;
-			// near < 0 means ray starts inside
 			return true;
 		}
 
@@ -303,10 +299,9 @@ namespace RayTraceBenchmark
 			return color;
 		}
 
-		public static byte[] Render(Scene scene)
+		public static byte[] Render(Scene scene, byte[] pixels)
 		{
-			byte[] pixels = new byte[Width*Height*3];
-			Vec3 eye = new Vec3();
+			var eye = Vec3.Zero;
 			float h = (float)Math.Tan(((fov / 360) * (2 * PI)) / 2) * 2;
 			float w = h * Width / Height;
 
@@ -339,7 +334,7 @@ namespace RayTraceBenchmark
 	// ==============================================
 	// Prep Code
 	// ==============================================
-	#if WIN8 || WP8 || WP7
+	#if WIN8 || WP8 || WP7 || ANDROID
 	static class Console
 	{
 		public delegate void WriteLineCallbackMethod(string value);
@@ -351,7 +346,7 @@ namespace RayTraceBenchmark
 		}
 	}
 
-	#if !WP8 && !WP7
+	#if !WP8 && !WP7 && !ANDROID
 	static class Thread
 	{
 		public static void Sleep(int milli)
@@ -409,7 +404,7 @@ namespace RayTraceBenchmark
 		}
 		#endif
 
-		#if WIN8 || WP8 || WP7
+		#if WIN8 || WP8 || WP7 || ANDROID
 		public delegate void SaveImageCallbackMethod(byte[] data);
 		public static SaveImageCallbackMethod SaveImageCallback;
 		#else
@@ -433,6 +428,8 @@ namespace RayTraceBenchmark
 			};
 
 			scene.Lights = new Light[]{new Light(new Vec3(-10, 20, 30), new Vec3(2, 2, 2))};
+			
+			byte[] pixels = new byte[Benchmark.Width * Benchmark.Height * 3];
 
 			// give the system a little time
 			GC.Collect();
@@ -447,7 +444,7 @@ namespace RayTraceBenchmark
 
 			var watch = new Stopwatch();
 			watch.Start();
-			var data = Benchmark.Render(scene);
+			var data = Benchmark.Render(scene, pixels);
 			watch.Stop();
 			Console.WriteLine("Sec: " + (watch.ElapsedMilliseconds / 1000d));
 
@@ -456,7 +453,7 @@ namespace RayTraceBenchmark
 			#endif
 
 			// save image
-			#if WIN8 || WP8 || WP7
+			#if WIN8 || WP8 || WP7 || ANDROID
 			if (SaveImageCallback != null) SaveImageCallback(data);
 			#else
 			Console.ReadLine();
