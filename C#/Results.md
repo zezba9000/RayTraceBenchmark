@@ -57,9 +57,9 @@ Mono 2.11.4 (Raspbian)
 (ARMv6) 35.499 sec
 
 
-PS Vita
+PS Vita (Guessing 750MHz - 1GHz ??)
 ---
-Mono ?? (PSM)
+Mono 2.10(??) (PSM)
 (ARMv6) 41.787 sec
 
 
