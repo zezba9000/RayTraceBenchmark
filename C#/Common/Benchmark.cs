@@ -3,6 +3,7 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace RayTraceBenchmark
 {
@@ -124,38 +125,38 @@ namespace RayTraceBenchmark
 			Reflection = refl;
 			Transparency = trans;
 		}
-
-		public Vec3 Normal(Vec3 pos)
+		
+		public static Vec3 Normal(Sphere sphere, Vec3 pos)
 		{
-			return Vec3.Normalize(pos - Center);
+			return Vec3.Normalize(pos - sphere.Center);
 		}
 
-		public bool Intersect(Ray ray)
+		public static bool Intersect(Sphere sphere, Ray ray)
 		{
-			var l = Center - ray.Org;
+			var l = sphere.Center - ray.Org;
 			var a = Vec3.Dot(l, ray.Dir);
 			if (a < 0)              // opposite direction
 				return false;
 
 			var b2 = Vec3.Dot(l, l) - (a * a);
-			var r2 = Radius * Radius;
+			var r2 = sphere.Radius * sphere.Radius;
 			if (b2 > r2)            // perpendicular > r
 				return false;
 
 			return true;
 		}
 
-		public bool Intersect(Ray ray, out float distance)
+		public static bool Intersect(Sphere sphere, Ray ray, out float distance)
 		{
 			distance = 0;
 
-			var l = Center - ray.Org;
+			var l = sphere.Center - ray.Org;
 			var a = Vec3.Dot(l, ray.Dir);
 			if (a < 0)              // opposite direction
 				return false;
 
 			var b2 = Vec3.Dot(l, l) - (a * a);
-			var r2 = Radius * Radius;
+			var r2 = sphere.Radius * sphere.Radius;
 			if (b2 > r2)            // perpendicular > r
 				return false;
 
@@ -165,11 +166,6 @@ namespace RayTraceBenchmark
 			distance = (near < 0) ? far : near;
 			// near < 0 means ray starts inside
 			return true;
-		}
-
-		public float Reflection_ratio()
-		{
-			return Reflection;
 		}
 	};
 
@@ -191,7 +187,7 @@ namespace RayTraceBenchmark
 		public Light[] Lights;
 	}
 
-	static class Benchmark
+	unsafe static class Benchmark
 	{
 		public const int Width = 1280;
 		public const int Height = 720;
@@ -208,7 +204,7 @@ namespace RayTraceBenchmark
 			foreach(var o in scene.Objects)
 			{
 				var distance = float.MaxValue;
-				if (o.Intersect(ray, out distance))
+				if (Sphere.Intersect(o, ray, out distance))
 				{
 					if (distance < nearest)
 					{
@@ -221,7 +217,7 @@ namespace RayTraceBenchmark
 			if (obj == null) return Vec3.Zero;
 
 			var point_of_hit = ray.Org + (ray.Dir * nearest);
-			var normal = obj.Normal(point_of_hit);
+			var normal = Sphere.Normal(obj, point_of_hit);
 			bool inside = false;
 
 			if (Vec3.Dot(normal, ray.Dir) > 0)
@@ -231,7 +227,7 @@ namespace RayTraceBenchmark
 			}
 
 			Vec3 color = Vec3.Zero;
-			var reflection_ratio = obj.Reflection_ratio();
+			var reflection_ratio = obj.Reflection;
 
 			foreach(var l in scene.Lights)
 			{
@@ -244,7 +240,7 @@ namespace RayTraceBenchmark
 				bool blocked = false;
 				foreach (var o in scene.Objects)
 				{
-					if (o.Intersect(r))
+					if (Sphere.Intersect(o, r))
 					{
 						blocked = true;
 						break;
@@ -299,7 +295,7 @@ namespace RayTraceBenchmark
 			return color;
 		}
 
-		public static byte[] Render(Scene scene, byte[] pixels)
+		public static byte* Render(Scene scene, byte* pixels)
 		{
 			var eye = Vec3.Zero;
 			float h = (float)Math.Tan(((fov / 360) * (2 * PI)) / 2) * 2;
@@ -360,7 +356,7 @@ namespace RayTraceBenchmark
 	#endif
 	#endif
 
-	static class BenchmarkMain
+	unsafe static class BenchmarkMain
 	{
 		#if WIN32
 		[StructLayout(LayoutKind.Sequential)]
@@ -429,7 +425,8 @@ namespace RayTraceBenchmark
 
 			scene.Lights = new Light[]{new Light(new Vec3(-10, 20, 30), new Vec3(2, 2, 2))};
 			
-			byte[] pixels = new byte[Benchmark.Width * Benchmark.Height * 3];
+			int pixelsLength = Benchmark.Width * Benchmark.Height * 3;
+			byte* pixels = (byte*)Marshal.AllocHGlobal(pixelsLength);
 
 			// give the system a little time
 			GC.Collect();
@@ -460,7 +457,10 @@ namespace RayTraceBenchmark
 			using (var file = new FileStream("Image.raw", FileMode.Create, FileAccess.Write))
 			using (var writer = new BinaryWriter(file))
 			{
-				file.Write(data, 0, data.Length);
+				for (int i = 0; i != pixelsLength; ++i)
+				{
+					file.WriteByte(data[i]);
+				}
 			}
 			#endif
 		}

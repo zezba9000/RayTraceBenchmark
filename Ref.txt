@@ -1,0 +1,10 @@
+mono --list-opt
+mono -O=sse2
+
+mono --help
+
+export MONO_VERBOSE_METHOD
+
+Optamizations done in jitter via "mono/mini/..."
+
+#if MONO_ARCH_SIMD_INTRINSICS
