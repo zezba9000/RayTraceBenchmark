@@ -61,7 +61,10 @@ Mono 2.10.8.1 (Ubuntu 13.10)
 RaspberryPi 750MHz
 ---
 Mono 2.11.4 (Raspbian)
-(ARMv6) 35.499 sec
+(ARMv6) 38.499 sec
+
+Mono 3.2.7 (Raspbian)
+(ARMv6) 30.1 sec
 
 
 PS Vita (Guessing 750MHz - 1GHz ??)
