@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Threading;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+
+#if !JSIL
+using System.Threading;
+#endif
 
 namespace RayTraceBenchmark
 {
@@ -187,7 +190,7 @@ namespace RayTraceBenchmark
 		public Light[] Lights;
 	}
 
-	unsafe static class Benchmark
+	static class Benchmark
 	{
 		public const int Width = 1280;
 		public const int Height = 720;
@@ -295,7 +298,7 @@ namespace RayTraceBenchmark
 			return color;
 		}
 
-		public static byte* Render(Scene scene, byte* pixels)
+		public static byte[] Render(Scene scene, byte[] pixels)
 		{
 			var eye = Vec3.Zero;
 			float h = (float)Math.Tan(((fov / 360) * (2 * PI)) / 2) * 2;
@@ -356,7 +359,7 @@ namespace RayTraceBenchmark
 	#endif
 	#endif
 
-	unsafe static class BenchmarkMain
+	static class BenchmarkMain
 	{
 		#if WIN32
 		[StructLayout(LayoutKind.Sequential)]
@@ -410,7 +413,11 @@ namespace RayTraceBenchmark
 		}
 		#endif
 
+		#if JSIL
+		public static byte[] Start()
+		#else
 		public static void Start()
+		#endif
 		{
 			// create objects
 			var scene = new Scene();
@@ -426,12 +433,14 @@ namespace RayTraceBenchmark
 			scene.Lights = new Light[]{new Light(new Vec3(-10, 20, 30), new Vec3(2, 2, 2))};
 			
 			int pixelsLength = Benchmark.Width * Benchmark.Height * 3;
-			byte* pixels = (byte*)Marshal.AllocHGlobal(pixelsLength);
+			byte[] pixels = new byte[pixelsLength];
 
 			// give the system a little time
+			#if !JSIL
 			GC.Collect();
 			Console.WriteLine("Give the system a little time...");
 			Thread.Sleep(2000);
+			#endif
 			Console.WriteLine("Starting test...");
 
 			// run test
@@ -452,7 +461,7 @@ namespace RayTraceBenchmark
 			// save image
 			#if WIN8 || WP8 || WP7 || ANDROID || IOS || VITA
 			if (SaveImageCallback != null) SaveImageCallback(data);
-			#else
+			#elif !JSIL
 			Console.ReadLine();
 			using (var file = new FileStream("Image.raw", FileMode.Create, FileAccess.Write))
 			using (var writer = new BinaryWriter(file))
@@ -462,6 +471,8 @@ namespace RayTraceBenchmark
 					file.WriteByte(data[i]);
 				}
 			}
+			#else
+			return pixels;
 			#endif
 		}
 

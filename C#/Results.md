@@ -30,6 +30,15 @@ Mono 3.2.1 (PC-BSD)
 (x86) = 1.181 sec
 (x64) = 1.569 sec
 
+JSIL (IE11)
+102.773 sec
+
+JSIL (FireFox 27)
+Never Finishes.
+
+JSIL (Chrome 33)
+62.012 sec
+
 
 Intel Core2 Duo P8600 2.40GHz
 ---

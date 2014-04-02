@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+</head>
+<body onload="onLoad()">
+	<canvas id="myCanvas" width="1280" height="720"></canvas>
+
+	<script type="text/javascript">
+		var jsilConfig = {
+			printStackTrace: false,
+			xna: 4,
+
+			manifests: [
+			  "Javascript_JSIL.exe"
+			],
+		};
+	</script>
+	<script src="../Libraries/JSIL.js" type="text/javascript"></script>
+
+	<canvas id="canvas" width="1280" height="720"></canvas><br>
+
+	<div id="log"></div>
+
+	<script type="text/javascript">
+		JSIL.Host.logWrite = function (text) {
+			console.log(text);
+		};
+
+		JSIL.Host.logWriteLine = function (text) {
+			console.log(text);
+		};
+
+		function runMain() {
+			// We can't invoke Main() since it disposes the Game immediately, breaking everything.
+			var asm = JSIL.GetAssembly("Javascript_JSIL", true);
+			var imageData = new asm.RayTraceBenchmark.BenchmarkMain.Start();
+			console.log("DONE! Creating Image...");
+
+			var c = document.getElementById("myCanvas");
+			var ctx = c.getContext("2d");
+			var imgData = ctx.createImageData(1280, 720);
+			var i2 = 0;
+			for (var i = 0; i < imageData.length; i += 3)
+			{
+				imgData.data[i2] = imageData[i];
+				imgData.data[i2 + 1] = imageData[i+1];
+				imgData.data[i2 + 2] = imageData[i+2];
+				imgData.data[i2 + 3] = 255;
+				i2 += 4;
+			}
+			ctx.putImageData(imgData, 10, 10);
+		};
+	</script>
+</body>
+</html>
