@@ -14,6 +14,10 @@ C# Results:
 ---
 https://github.com/zezba9000/RayTraceBenchmark/blob/master/C%23/Results.md
 
+Cpp Results:
+---
+https://github.com/zezba9000/RayTraceBenchmark/blob/master/Cpp/Results.md
+
 Nimrod Results:
 ---
 https://github.com/zezba9000/RayTraceBenchmark/blob/master/Nimrod/Results.md
