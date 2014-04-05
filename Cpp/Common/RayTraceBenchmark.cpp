@@ -3,6 +3,10 @@
 #include <Windows.h>
 #endif
 
+#if !WIN32
+#include <unistd.h>
+#endif
+
 #include <math.h>
 #include <float.h>
 #include <ctime>
@@ -257,14 +261,14 @@ namespace RayTraceBenchmark
 				if (!blocked)
 				{
 					color += l->Color
-						* max(0, Vec3::Dot(normal, light_direction))
+						* max(0.0f, Vec3::Dot(normal, light_direction))
 						* obj->Color
 						* (1.0f - reflection_ratio);
 				}
 			}
 
 			auto rayNormDot = Vec3::Dot(ray.Dir, normal);
-			Num facing = max(0, -rayNormDot);
+			Num facing = max(0.0f, -rayNormDot);
 			Num fresneleffect = reflection_ratio + ((1 - reflection_ratio) * pow((1 - facing), 5));
 
 			// compute reflection
@@ -324,9 +328,9 @@ namespace RayTraceBenchmark
 					r.Dir = dir;
 					auto pixel = trace(r, scene, 0);
 					int i = (x*3) + (y*Width*3);
-					pixels[i] = min(pixel.X * 255, 255);
-					pixels[i+1] = min(pixel.Y * 255, 255);
-					pixels[i+2] = min(pixel.Z * 255, 255);
+					pixels[i] = min(pixel.X * 255, 255.0f);
+					pixels[i+1] = min(pixel.Y * 255, 255.0f);
+					pixels[i+2] = min(pixel.Z * 255, 255.0f);
 				}
 			}
 
@@ -390,7 +394,11 @@ namespace RayTraceBenchmark
 
 			// give the system a little time
 			cout << "Give the system a little time..." << endl;
+			#ifdef WIN32
 			Sleep(2000);
+			#else
+			usleep(2000 * 1000);
+			#endif
 			cout << "Starting test..." << endl;
 
 			// run test
@@ -400,7 +408,7 @@ namespace RayTraceBenchmark
 
 			unsigned int start = clock();
 			auto data = Benchmark::Render(*scene, pixels);
-			cout << "Sec: " << ((clock()-start) / 1000.0);
+			cout << "Sec: " << ((clock()-start) / 1000.0) << endl;
 
 			#if WIN32
 			Win32EndOptimizedStopwatch();
@@ -417,7 +425,7 @@ namespace RayTraceBenchmark
 #ifdef WIN32
 int _tmain(int argc, wchar_t* argv[])
 #else
-int main()
+int main(int argc, char *argv[])
 #endif
 {
 	RayTraceBenchmark::BenchmarkMain::Start();
