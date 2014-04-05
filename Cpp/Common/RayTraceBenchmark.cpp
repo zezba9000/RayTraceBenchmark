@@ -318,7 +318,7 @@ namespace RayTraceBenchmark
 				{
 					Num xx = x, yy = y, ww = Width, hh = Height;
 					Vec3 dir;
-					dir.X = ((xx - (ww / 2.0f)) / ww)  * w;
+					dir.X = ((xx - (ww / 2.0f)) / ww) * w;
 					dir.Y = (((hh/2.0f) - yy) / hh) * h;
 					dir.Z = -1.0f;
 					dir = Vec3::Normalize(dir);
