@@ -1,3 +1,6 @@
+#ifndef SOMETHING
+#define SOMETHING
+
 #ifdef WIN32
 #include "../RayTraceBenchmark/RayTraceBenchmark/stdafx.h"
 #include <Windows.h>
@@ -13,6 +16,10 @@
 #include <fstream>
 #include <iostream>
 using namespace std;
+
+#if IOS
+#include "RayTraceBenchmark.cpp"
+#endif
 
 //#define BIT64
 
@@ -372,7 +379,7 @@ namespace RayTraceBenchmark
 		}
 		#endif
 
-		static void Start()
+		static double Start()
 		{
 			// create objects
 			auto scene = new Scene();
@@ -408,26 +415,38 @@ namespace RayTraceBenchmark
 
 			unsigned int start = clock();
 			auto data = Benchmark::Render(*scene, pixels);
-			cout << "Sec: " << ((clock()-start) / 1000.0) << endl;
+            double sec = ((clock()-start) / (double)CLOCKS_PER_SEC);
+			cout << "Sec: " << sec << endl;
 
 			#if WIN32
 			Win32EndOptimizedStopwatch();
 			#endif
 
 			// save image
+#if !IOS
 			ofstream outfile ("Image.raw", ofstream::binary);
 			outfile.write(data, pixelsLength);
 			outfile.close();
+#endif
+            
+            return sec;
 		}
 	};
 }
 
 #ifdef WIN32
 int _tmain(int argc, wchar_t* argv[])
+#elif IOS
+double runTest()
 #else
 int main(int argc, char *argv[])
 #endif
 {
-	RayTraceBenchmark::BenchmarkMain::Start();
+	double sec = RayTraceBenchmark::BenchmarkMain::Start();
+#ifdef IOS
+    return sec;
+#endif
 	return 0;
 }
+
+#endif
