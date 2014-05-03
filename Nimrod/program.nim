@@ -19,7 +19,7 @@ type Vec3 =
     x, y, z: float
 
 
-{.push inline, noInit.}
+{.push inline, noInit, noSideEffect.}
 
 proc `-`(v:Vec3): Vec3 = (-v.x, -v.y, -v.z)
 
@@ -143,7 +143,7 @@ proc new(T:typedesc[Scene]): Scene =
 
 # ---
 
-proc trace(this:Ray, scene:Scene, depth:int): Vec3 = 
+proc trace(this:Ray, scene:Scene, depth:int): Vec3 {.noInit.} = 
   var nearest = inf
   var obj: Sphere
   
