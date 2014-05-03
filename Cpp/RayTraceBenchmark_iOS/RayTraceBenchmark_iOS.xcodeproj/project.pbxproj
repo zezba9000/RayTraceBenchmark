@@ -1,0 +1,498 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		493F962D18EFC2F6007F9CC4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493F962C18EFC2F6007F9CC4 /* Foundation.framework */; };
+		493F962F18EFC2F6007F9CC4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493F962E18EFC2F6007F9CC4 /* CoreGraphics.framework */; };
+		493F963118EFC2F6007F9CC4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493F963018EFC2F6007F9CC4 /* UIKit.framework */; };
+		493F963718EFC2F6007F9CC4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 493F963518EFC2F6007F9CC4 /* InfoPlist.strings */; };
+		493F963918EFC2F6007F9CC4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F963818EFC2F6007F9CC4 /* main.m */; };
+		493F963D18EFC2F6007F9CC4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F963C18EFC2F6007F9CC4 /* AppDelegate.m */; };
+		493F964018EFC2F6007F9CC4 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 493F963E18EFC2F6007F9CC4 /* Main_iPhone.storyboard */; };
+		493F964318EFC2F6007F9CC4 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 493F964118EFC2F6007F9CC4 /* Main_iPad.storyboard */; };
+		493F964618EFC2F6007F9CC4 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 493F964518EFC2F6007F9CC4 /* ViewController.mm */; };
+		493F964818EFC2F6007F9CC4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 493F964718EFC2F6007F9CC4 /* Images.xcassets */; };
+		493F964F18EFC2F6007F9CC4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493F964E18EFC2F6007F9CC4 /* XCTest.framework */; };
+		493F965018EFC2F6007F9CC4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493F962C18EFC2F6007F9CC4 /* Foundation.framework */; };
+		493F965118EFC2F6007F9CC4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493F963018EFC2F6007F9CC4 /* UIKit.framework */; };
+		493F965918EFC2F6007F9CC4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 493F965718EFC2F6007F9CC4 /* InfoPlist.strings */; };
+		493F965B18EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 493F965A18EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests.m */; };
+		493F966518EFC317007F9CC4 /* RayTraceBenchmark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 493F966418EFC317007F9CC4 /* RayTraceBenchmark.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		493F965218EFC2F6007F9CC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 493F962118EFC2F6007F9CC4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 493F962818EFC2F6007F9CC4;
+			remoteInfo = RayTraceBenchmark_iOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		493F962918EFC2F6007F9CC4 /* RayTraceBenchmark_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RayTraceBenchmark_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		493F962C18EFC2F6007F9CC4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		493F962E18EFC2F6007F9CC4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		493F963018EFC2F6007F9CC4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		493F963418EFC2F6007F9CC4 /* RayTraceBenchmark_iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RayTraceBenchmark_iOS-Info.plist"; sourceTree = "<group>"; };
+		493F963618EFC2F6007F9CC4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		493F963818EFC2F6007F9CC4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		493F963A18EFC2F6007F9CC4 /* RayTraceBenchmark_iOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RayTraceBenchmark_iOS-Prefix.pch"; sourceTree = "<group>"; };
+		493F963B18EFC2F6007F9CC4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		493F963C18EFC2F6007F9CC4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		493F963F18EFC2F6007F9CC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		493F964218EFC2F6007F9CC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		493F964418EFC2F6007F9CC4 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		493F964518EFC2F6007F9CC4 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		493F964718EFC2F6007F9CC4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		493F964D18EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RayTraceBenchmark_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		493F964E18EFC2F6007F9CC4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		493F965618EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RayTraceBenchmark_iOSTests-Info.plist"; sourceTree = "<group>"; };
+		493F965818EFC2F6007F9CC4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		493F965A18EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RayTraceBenchmark_iOSTests.m; sourceTree = "<group>"; };
+		493F966418EFC317007F9CC4 /* RayTraceBenchmark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RayTraceBenchmark.cpp; path = ../../Common/RayTraceBenchmark.cpp; sourceTree = "<group>"; };
+		493F966718EFC4FB007F9CC4 /* RayTraceBenchmark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RayTraceBenchmark.h; path = ../../Common/RayTraceBenchmark.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		493F962618EFC2F6007F9CC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				493F962F18EFC2F6007F9CC4 /* CoreGraphics.framework in Frameworks */,
+				493F963118EFC2F6007F9CC4 /* UIKit.framework in Frameworks */,
+				493F962D18EFC2F6007F9CC4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		493F964A18EFC2F6007F9CC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				493F964F18EFC2F6007F9CC4 /* XCTest.framework in Frameworks */,
+				493F965118EFC2F6007F9CC4 /* UIKit.framework in Frameworks */,
+				493F965018EFC2F6007F9CC4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		493F962018EFC2F6007F9CC4 = {
+			isa = PBXGroup;
+			children = (
+				493F963218EFC2F6007F9CC4 /* RayTraceBenchmark_iOS */,
+				493F965418EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests */,
+				493F962B18EFC2F6007F9CC4 /* Frameworks */,
+				493F962A18EFC2F6007F9CC4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		493F962A18EFC2F6007F9CC4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				493F962918EFC2F6007F9CC4 /* RayTraceBenchmark_iOS.app */,
+				493F964D18EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		493F962B18EFC2F6007F9CC4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				493F962C18EFC2F6007F9CC4 /* Foundation.framework */,
+				493F962E18EFC2F6007F9CC4 /* CoreGraphics.framework */,
+				493F963018EFC2F6007F9CC4 /* UIKit.framework */,
+				493F964E18EFC2F6007F9CC4 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		493F963218EFC2F6007F9CC4 /* RayTraceBenchmark_iOS */ = {
+			isa = PBXGroup;
+			children = (
+				493F966718EFC4FB007F9CC4 /* RayTraceBenchmark.h */,
+				493F966418EFC317007F9CC4 /* RayTraceBenchmark.cpp */,
+				493F963B18EFC2F6007F9CC4 /* AppDelegate.h */,
+				493F963C18EFC2F6007F9CC4 /* AppDelegate.m */,
+				493F963E18EFC2F6007F9CC4 /* Main_iPhone.storyboard */,
+				493F964118EFC2F6007F9CC4 /* Main_iPad.storyboard */,
+				493F964418EFC2F6007F9CC4 /* ViewController.h */,
+				493F964518EFC2F6007F9CC4 /* ViewController.mm */,
+				493F964718EFC2F6007F9CC4 /* Images.xcassets */,
+				493F963318EFC2F6007F9CC4 /* Supporting Files */,
+			);
+			path = RayTraceBenchmark_iOS;
+			sourceTree = "<group>";
+		};
+		493F963318EFC2F6007F9CC4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				493F963418EFC2F6007F9CC4 /* RayTraceBenchmark_iOS-Info.plist */,
+				493F963518EFC2F6007F9CC4 /* InfoPlist.strings */,
+				493F963818EFC2F6007F9CC4 /* main.m */,
+				493F963A18EFC2F6007F9CC4 /* RayTraceBenchmark_iOS-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		493F965418EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				493F965A18EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests.m */,
+				493F965518EFC2F6007F9CC4 /* Supporting Files */,
+			);
+			path = RayTraceBenchmark_iOSTests;
+			sourceTree = "<group>";
+		};
+		493F965518EFC2F6007F9CC4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				493F965618EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests-Info.plist */,
+				493F965718EFC2F6007F9CC4 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		493F962818EFC2F6007F9CC4 /* RayTraceBenchmark_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 493F965E18EFC2F6007F9CC4 /* Build configuration list for PBXNativeTarget "RayTraceBenchmark_iOS" */;
+			buildPhases = (
+				493F962518EFC2F6007F9CC4 /* Sources */,
+				493F962618EFC2F6007F9CC4 /* Frameworks */,
+				493F962718EFC2F6007F9CC4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RayTraceBenchmark_iOS;
+			productName = RayTraceBenchmark_iOS;
+			productReference = 493F962918EFC2F6007F9CC4 /* RayTraceBenchmark_iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		493F964C18EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 493F966118EFC2F6007F9CC4 /* Build configuration list for PBXNativeTarget "RayTraceBenchmark_iOSTests" */;
+			buildPhases = (
+				493F964918EFC2F6007F9CC4 /* Sources */,
+				493F964A18EFC2F6007F9CC4 /* Frameworks */,
+				493F964B18EFC2F6007F9CC4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				493F965318EFC2F6007F9CC4 /* PBXTargetDependency */,
+			);
+			name = RayTraceBenchmark_iOSTests;
+			productName = RayTraceBenchmark_iOSTests;
+			productReference = 493F964D18EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		493F962118EFC2F6007F9CC4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Reign-Studios";
+				TargetAttributes = {
+					493F964C18EFC2F6007F9CC4 = {
+						TestTargetID = 493F962818EFC2F6007F9CC4;
+					};
+				};
+			};
+			buildConfigurationList = 493F962418EFC2F6007F9CC4 /* Build configuration list for PBXProject "RayTraceBenchmark_iOS" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 493F962018EFC2F6007F9CC4;
+			productRefGroup = 493F962A18EFC2F6007F9CC4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				493F962818EFC2F6007F9CC4 /* RayTraceBenchmark_iOS */,
+				493F964C18EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		493F962718EFC2F6007F9CC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				493F964318EFC2F6007F9CC4 /* Main_iPad.storyboard in Resources */,
+				493F964818EFC2F6007F9CC4 /* Images.xcassets in Resources */,
+				493F964018EFC2F6007F9CC4 /* Main_iPhone.storyboard in Resources */,
+				493F963718EFC2F6007F9CC4 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		493F964B18EFC2F6007F9CC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				493F965918EFC2F6007F9CC4 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		493F962518EFC2F6007F9CC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				493F966518EFC317007F9CC4 /* RayTraceBenchmark.cpp in Sources */,
+				493F964618EFC2F6007F9CC4 /* ViewController.mm in Sources */,
+				493F963D18EFC2F6007F9CC4 /* AppDelegate.m in Sources */,
+				493F963918EFC2F6007F9CC4 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		493F964918EFC2F6007F9CC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				493F965B18EFC2F6007F9CC4 /* RayTraceBenchmark_iOSTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		493F965318EFC2F6007F9CC4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 493F962818EFC2F6007F9CC4 /* RayTraceBenchmark_iOS */;
+			targetProxy = 493F965218EFC2F6007F9CC4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		493F963518EFC2F6007F9CC4 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				493F963618EFC2F6007F9CC4 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		493F963E18EFC2F6007F9CC4 /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				493F963F18EFC2F6007F9CC4 /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		493F964118EFC2F6007F9CC4 /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				493F964218EFC2F6007F9CC4 /* Base */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		493F965718EFC2F6007F9CC4 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				493F965818EFC2F6007F9CC4 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		493F965C18EFC2F6007F9CC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		493F965D18EFC2F6007F9CC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		493F965F18EFC2F6007F9CC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RayTraceBenchmark_iOS/RayTraceBenchmark_iOS-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					IOS,
+				);
+				INFOPLIST_FILE = "RayTraceBenchmark_iOS/RayTraceBenchmark_iOS-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		493F966018EFC2F6007F9CC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RayTraceBenchmark_iOS/RayTraceBenchmark_iOS-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = IOS;
+				INFOPLIST_FILE = "RayTraceBenchmark_iOS/RayTraceBenchmark_iOS-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		493F966218EFC2F6007F9CC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RayTraceBenchmark_iOS.app/RayTraceBenchmark_iOS";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RayTraceBenchmark_iOS/RayTraceBenchmark_iOS-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "RayTraceBenchmark_iOSTests/RayTraceBenchmark_iOSTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		493F966318EFC2F6007F9CC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RayTraceBenchmark_iOS.app/RayTraceBenchmark_iOS";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RayTraceBenchmark_iOS/RayTraceBenchmark_iOS-Prefix.pch";
+				INFOPLIST_FILE = "RayTraceBenchmark_iOSTests/RayTraceBenchmark_iOSTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		493F962418EFC2F6007F9CC4 /* Build configuration list for PBXProject "RayTraceBenchmark_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				493F965C18EFC2F6007F9CC4 /* Debug */,
+				493F965D18EFC2F6007F9CC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		493F965E18EFC2F6007F9CC4 /* Build configuration list for PBXNativeTarget "RayTraceBenchmark_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				493F965F18EFC2F6007F9CC4 /* Debug */,
+				493F966018EFC2F6007F9CC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		493F966118EFC2F6007F9CC4 /* Build configuration list for PBXNativeTarget "RayTraceBenchmark_iOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				493F966218EFC2F6007F9CC4 /* Debug */,
+				493F966318EFC2F6007F9CC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 493F962118EFC2F6007F9CC4 /* Project object */;
+}

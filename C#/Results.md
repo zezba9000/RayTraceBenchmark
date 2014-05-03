@@ -1,6 +1,13 @@
 C# Results
 ===
 
+AMD Phenom II X4 920 2.8Ghz
+---
+Mono 3.2.3 (Arch Linux)
+(x86) = 2.24 sec
+(x64) = 2.239 sec
+
+
 AMD Athlon 64 X2 Dual Core 4600+ 2.40GHz
 ---
 .NET 4.5 (Win8-Win32)
@@ -22,6 +29,15 @@ Mono 3.2.1 (PC-BSD)
 .NET 4.5.1 (Win8-WinRT)
 (x86) = 1.181 sec
 (x64) = 1.569 sec
+
+JSIL (IE11)
+102.773 sec
+
+JSIL (FireFox 27)
+Never Finishes.
+
+JSIL (Chrome 33)
+62.012 sec
 
 
 Intel Core2 Duo P8600 2.40GHz
@@ -54,7 +70,10 @@ Mono 2.10.8.1 (Ubuntu 13.10)
 RaspberryPi 750MHz
 ---
 Mono 2.11.4 (Raspbian)
-(ARMv6) 35.499 sec
+(ARMv6) 38.499 sec
+
+Mono 3.2.7 (Raspbian)
+(ARMv6) 30.1 sec
 
 
 PS Vita (Guessing 750MHz - 1GHz ??)
