@@ -52,7 +52,7 @@ type Ray {.byRef.} =
     org, dir: Vec3
 
 
-proc new(T:typedesc[Ray], org, dir:Vec3): Ray {.inline, noInit.} =
+proc new(T:type Ray, org, dir:Vec3): Ray {.inline, noInit.} =
   result.org = org
   result.dir = dir
 
@@ -67,7 +67,7 @@ type Sphere =
     transparency: float
 
 
-proc new(T:typedesc[Sphere], center:Vec3, radius:float, color:Vec3, refl:float = 0, trans:float = 0): Sphere =
+proc new(T:type Sphere, center:Vec3, radius:float, color:Vec3, refl:float = 0, trans:float = 0): Sphere =
   System.new(result)
   result.center = center
   result.radius = radius
@@ -123,7 +123,7 @@ type Light =
     color: Vec3
 
 
-proc new(T:typedesc[Light], position, color:Vec3): Light =
+proc new(T:type Light, position, color:Vec3): Light =
   System.new(result)
   result.position = position
   result.color = color
@@ -136,7 +136,7 @@ type Scene =
     lights: seq[Light]
 
 
-proc new(T:typedesc[Scene]): Scene = 
+proc new(T:type Scene): Scene = 
   System.new(result)
   result.objects = @[]
   result.lights = @[]
