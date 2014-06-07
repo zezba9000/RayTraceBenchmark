@@ -9,8 +9,8 @@ import
 
 const width    = 1280
 const height   = 720
+const depthMax = 6
 const fov      = 45.0
-const maxDepth = 6
 
 # ---
 
@@ -39,8 +39,8 @@ proc `+=`(this:var Vec3, v:Vec3) =
 
 {.pop.}
 
-template new(T:typedesc[Vec3], x, y, z:float): Vec3 = (x, y, z)
-template zero(T:typedesc[Vec3]): Vec3 = (0.0, 0.0, 0.0)
+template new(T:type Vec3, x, y, z:float): Vec3 = (x, y, z)
+template zero(T:type Vec3): Vec3 = (0.0, 0.0, 0.0)
 
 template dot(a, b:Vec3): float = (a.x * b.x) + (a.y * b.y) + (a.z * b.z)
 template normalize(v:Vec3): Vec3 = v / sqrt(dot(v, v))
@@ -49,11 +49,11 @@ template normalize(v:Vec3): Vec3 = v / sqrt(dot(v, v))
 
 type Ray {.byRef.} =
   object
-    org, dir: Vec3
+    pos, dir: Vec3
 
 
-proc new(T:type Ray, org, dir:Vec3): Ray {.inline, noInit.} =
-  result.org = org
+proc new(T:type Ray, pos, dir:Vec3): Ray {.inline, noInit.} =
+  result.pos = pos
   result.dir = dir
 
 # ---
@@ -81,7 +81,7 @@ proc normal(this:Sphere, pos:Vec3): Vec3 {.inline, noInit.} =
 
 
 proc intersect(this:Sphere, ray:Ray): bool {.noInit.} =
-  let d = this.center - ray.org
+  let d = this.center - ray.pos
   let a = dot(d, ray.dir)
   if a < 0: # opposite direction
     return false
@@ -97,7 +97,7 @@ proc intersect(this:Sphere, ray:Ray): bool {.noInit.} =
 proc intersect(this:Sphere, ray:Ray, distance:var float): bool {.noInit.} =
   distance = 0
   
-  let d = this.center - ray.org
+  let d = this.center - ray.pos
   let a = dot(d, ray.dir)
   if a < 0: # opposite direction
     return false
@@ -136,7 +136,7 @@ type Scene =
     lights: seq[Light]
 
 
-proc new(T:type Scene): Scene = 
+proc new(T:type Scene): Scene =
   System.new(result)
   result.objects = @[]
   result.lights = @[]
@@ -158,7 +158,7 @@ proc trace(this:Ray, scene:Scene, depth:int): Vec3 {.noInit.} =
   if obj == nil:
     return Vec3.zero
   
-  let hitPoint = this.org + (this.dir * nearest)
+  let hitPoint = this.pos + (this.dir * nearest)
   var normal = obj.normal(hitPoint)
   var inside = false
   
@@ -189,13 +189,13 @@ proc trace(this:Ray, scene:Scene, depth:int): Vec3 {.noInit.} =
   let fresnel = reflRatio + ((1.0 - reflRatio) * pow((1.0 - facing), 5.0))
   
   # compute reflection
-  if depth < maxDepth and reflRatio > 0:
+  if depth < depthMax and reflRatio > 0:
     let reflDir = this.dir + (normal * 2 * rayNormDot * -1.0)
     let tr = Ray.new(hitPoint + (normal * 1.0e-5), reflDir)
     color += tr.trace(scene, depth + 1) * fresnel
   
   # compute refraction
-  if depth < maxDepth and obj.transparency > 0:
+  if depth < depthMax and obj.transparency > 0:
     const iorDefault = 1.0 / 1.5
     let ior = if inside: iorDefault else: 1.5
     let ce = dot(this.dir, normal) * -1.0
@@ -215,11 +215,11 @@ proc trace(this:Ray, scene:Scene, depth:int): Vec3 {.noInit.} =
 # ---
 
 const pixelsSize = width * height * 3
-type Pixels {.byRef.} = array[0 .. pixelsSize, byte]
+type Pixels = array[pixelsSize, byte]
 
 # ---
 
-proc render(this:var Pixels, scene:Scene) =
+proc render(this:ref Pixels, scene:Scene) =
   let h = tan(((fov / 360.0) * (2.0 * Pi)) / 2.0) * 2.0
   let w = h * width / height
   
@@ -228,8 +228,8 @@ proc render(this:var Pixels, scene:Scene) =
       let wf: float = width
       let hf: float = height
       let dir = Vec3.new(
-        ((x.float - (wf / 2.0)) / wf) * w,
-        (((hf / 2.0) - y.float) / hf) * h,
+        ((float(x) - (wf / 2.0)) / wf) * w,
+        (((hf / 2.0) - float(y)) / hf) * h,
         -1.0).normalize()
       
       let r = Ray.new(Vec3.zero, dir)
@@ -242,8 +242,8 @@ proc render(this:var Pixels, scene:Scene) =
 
 
 proc main =
-  var scene = Scene.new()
-  var image: Pixels
+  let scene = new Scene
+  let image = new Pixels
   
   scene.objects.add(Sphere.new(Vec3.new(0.0, -10002.0, -20.0), 10000, Vec3.new(0.8, 0.8, 0.8)))
   scene.objects.add(Sphere.new(Vec3.new(0.0, 2.0, -20.0), 4, Vec3.new(0.8, 0.5, 0.5), 0.5))
@@ -265,8 +265,8 @@ proc main =
   echo "Sec: ", (duration / 1000.0).formatFloat(FFDecimal, 2)
   
   # save image
-  var fs = newFileStream("Image.raw", FMWrite)
-  fs.writeData(cast[pointer](addr image), pixelsSize)
+  let fs = newFileStream("Image.raw", FMWrite)
+  fs.writeData(cast[pointer](image), pixelsSize)
 
 # ---
 
