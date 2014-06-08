@@ -1,23 +1,18 @@
 
-import
-  Math,
-  Times,
-  Streams,
-  StrUtils
-
-# ---
+import Math, Times, Streams, StrUtils
 
 const width    = 1280
 const height   = 720
 const depthMax = 6
 const fov      = 45.0
 
-# ---
+# ---------- ---------- ---------- #
 
 type Vec3 =
   tuple
     x, y, z: float
 
+# ---
 
 {.push inline, noInit, noSideEffect.}
 
@@ -39,49 +34,32 @@ proc `+=`(this:var Vec3, v:Vec3) =
 
 {.pop.}
 
-template new(T:type Vec3, x, y, z:float): Vec3 = (x, y, z)
 template zero(T:type Vec3): Vec3 = (0.0, 0.0, 0.0)
 
 template dot(a, b:Vec3): float = (a.x * b.x) + (a.y * b.y) + (a.z * b.z)
 template normalize(v:Vec3): Vec3 = v / sqrt(dot(v, v))
   
-# ---
+# ---------- ---------- ---------- #
 
-type Ray {.byRef.} =
+type Ray =
   object
     pos, dir: Vec3
 
-
-proc new(T:type Ray, pos, dir:Vec3): Ray {.inline, noInit.} =
-  result.pos = pos
-  result.dir = dir
+type Sphere =
+  ref object
+    pos: Vec3
+    color: Vec3
+    radius: float
+    refl, tran: float
 
 # ---
 
-type Sphere =
-  ref object
-    center: Vec3
-    radius: float
-    color: Vec3
-    reflection: float
-    transparency: float
-
-
-proc new(T:type Sphere, center:Vec3, radius:float, color:Vec3, refl:float = 0, trans:float = 0): Sphere =
-  System.new(result)
-  result.center = center
-  result.radius = radius
-  result.color = color
-  result.reflection = refl
-  result.transparency = trans
-
-
 proc normal(this:Sphere, pos:Vec3): Vec3 {.inline, noInit.} =
-  return normalize(pos - this.center)
+  return normalize(pos - this.pos)
 
 
 proc intersect(this:Sphere, ray:Ray): bool {.noInit.} =
-  let d = this.center - ray.pos
+  let d = this.pos - ray.pos
   let a = dot(d, ray.dir)
   if a < 0: # opposite direction
     return false
@@ -97,7 +75,7 @@ proc intersect(this:Sphere, ray:Ray): bool {.noInit.} =
 proc intersect(this:Sphere, ray:Ray, distance:var float): bool {.noInit.} =
   distance = 0
   
-  let d = this.center - ray.pos
+  let d = this.pos - ray.pos
   let a = dot(d, ray.dir)
   if a < 0: # opposite direction
     return false
@@ -115,29 +93,21 @@ proc intersect(this:Sphere, ray:Ray, distance:var float): bool {.noInit.} =
   
   return true
 
-# ---
+# ---------- ---------- ---------- #
 
 type Light =
   ref object
-    position: Vec3
-    color: Vec3
-
-
-proc new(T:type Light, position, color:Vec3): Light =
-  System.new(result)
-  result.position = position
-  result.color = color
-
-# ---
+    pos, color: Vec3
 
 type Scene =
   ref object
     objects: seq[Sphere]
     lights: seq[Light]
 
+# ---
 
 proc new(T:type Scene): Scene =
-  System.new(result)
+  new result
   result.objects = @[]
   result.lights = @[]
 
@@ -167,11 +137,11 @@ proc trace(this:Ray, scene:Scene, depth:int): Vec3 {.noInit.} =
     normal = -normal
   
   var color = Vec3.zero
-  let reflRatio = obj.reflection
+  let reflRatio = obj.refl
   
   for light in scene.lights:
-    let lightDir = normalize(light.position - hitPoint)
-    let tr = Ray.new(hitPoint + (normal * 1.0e-5), lightDir)
+    let lightDir = normalize(light.pos - hitPoint)
+    let tr = Ray(pos:hitPoint + (normal * 1.0e-5), dir:lightDir)
     
     # go through the scene check whether we're blocked from the lights
     var blocked = false
@@ -191,11 +161,11 @@ proc trace(this:Ray, scene:Scene, depth:int): Vec3 {.noInit.} =
   # compute reflection
   if depth < depthMax and reflRatio > 0:
     let reflDir = this.dir + (normal * 2 * rayNormDot * -1.0)
-    let tr = Ray.new(hitPoint + (normal * 1.0e-5), reflDir)
+    let tr = Ray(pos:hitPoint + (normal * 1.0e-5), dir:reflDir)
     color += tr.trace(scene, depth + 1) * fresnel
   
   # compute refraction
-  if depth < depthMax and obj.transparency > 0:
+  if depth < depthMax and obj.tran > 0:
     const iorDefault = 1.0 / 1.5
     let ior = if inside: iorDefault else: 1.5
     let ce = dot(this.dir, normal) * -1.0
@@ -207,19 +177,19 @@ proc trace(this:Ray, scene:Scene, depth:int): Vec3 {.noInit.} =
     if sin_t2_2 < 1.0:
       let gc = normal * sqrt(1.0 - sin_t2_2)
       let refrDir = gf - gc
-      let tr = Ray.new(hitPoint - (normal * 1.0e-4), refrDir)
-      color += tr.trace(scene, depth + 1) * (1.0 - fresnel) * obj.transparency
+      let tr = Ray(pos:hitPoint - (normal * 1.0e-4), dir:refrDir)
+      color += tr.trace(scene, depth + 1) * (1.0 - fresnel) * obj.tran
   
   return color
 
+# ---------- ---------- ---------- #
+
+const pixmapSize = width * height * 3
+type Pixmap = array[pixmapSize, byte]
+
 # ---
 
-const pixelsSize = width * height * 3
-type Pixels = array[pixelsSize, byte]
-
-# ---
-
-proc render(this:ref Pixels, scene:Scene) =
+proc render(this:ref Pixmap, scene:Scene) =
   let h = tan(((fov / 360.0) * (2.0 * Pi)) / 2.0) * 2.0
   let w = h * width / height
   
@@ -227,34 +197,41 @@ proc render(this:ref Pixels, scene:Scene) =
     for x in 0 .. width-1:
       let wf: float = width
       let hf: float = height
-      let dir = Vec3.new(
-        ((float(x) - (wf / 2.0)) / wf) * w,
-        (((hf / 2.0) - float(y)) / hf) * h,
-        -1.0).normalize()
+      let dir: Vec3 = (
+        x: ((float(x) - (wf / 2.0)) / wf) * w,
+        y: (((hf / 2.0) - float(y)) / hf) * h,
+        z: -1.0
+      ).normalize()
       
-      let r = Ray.new(Vec3.zero, dir)
-      let pixel = r.trace(scene, 0)
-      let i: int = (x * 3) + (y * width * 3)
+      let ray = Ray(pos:Vec3.zero, dir:dir)
+      let pixel = ray.trace(scene, 0)
+      let index: int = (x * 3) + (y * width * 3)
       
-      this[i]   = min(pixel.x * 255, 255).byte
-      this[i+1] = min(pixel.y * 255, 255).byte
-      this[i+2] = min(pixel.z * 255, 255).byte
+      this[index]   = min(pixel.x * 255, 255).byte
+      this[index+1] = min(pixel.y * 255, 255).byte
+      this[index+2] = min(pixel.z * 255, 255).byte
 
+# ---------- ---------- ---------- #
 
 proc main =
+  ## raytraces a simple scene and saves an image
   let scene = new Scene
-  let image = new Pixels
+  let image = new Pixmap
   
-  scene.objects.add(Sphere.new(Vec3.new(0.0, -10002.0, -20.0), 10000, Vec3.new(0.8, 0.8, 0.8)))
-  scene.objects.add(Sphere.new(Vec3.new(0.0, 2.0, -20.0), 4, Vec3.new(0.8, 0.5, 0.5), 0.5))
-  scene.objects.add(Sphere.new(Vec3.new(5.0, 0.0, -15.0), 2, Vec3.new(0.3, 0.8, 0.8), 0.2))
-  scene.objects.add(Sphere.new(Vec3.new(-5.0, 0.0, -15.0), 2, Vec3.new(0.3, 0.5, 0.8), 0.2))
-  scene.objects.add(Sphere.new(Vec3.new(-2.0, -1.0, -10.0), 1, Vec3.new(0.1, 0.1, 0.1), 0.1, 0.8))
+  # add geometry
+  scene.objects.add Sphere(pos:(0.0, -10002.0, -20.0), radius:10000, color:(0.8, 0.8, 0.8))
+  scene.objects.add Sphere(pos:( 0.0,  2.0, -20.0), radius:4, color:(0.8, 0.5, 0.5), refl:0.5)
+  scene.objects.add Sphere(pos:( 5.0,  0.0, -15.0), radius:2, color:(0.3, 0.8, 0.8), refl:0.2)
+  scene.objects.add Sphere(pos:(-5.0,  0.0, -15.0), radius:2, color:(0.3, 0.5, 0.8), refl:0.2)
+  scene.objects.add Sphere(pos:(-2.0, -1.0, -10.0), radius:1, color:(0.1, 0.1, 0.1), refl:0.1, tran:0.8)
   
-  scene.lights.add(Light.new(
-    Vec3.new(-10.0, 20.0, 30.0),
-    Vec3.new(2.0, 2.0, 2.0)))
+  # add light
+  scene.lights.add Light (
+    pos:(-10.0, 20.0, 30.0),
+    color:(2.0, 2.0, 2.0)
+  )
   
+  # run test
   echo "Starting test..."
   
   let start = (cpuTime() * 1000.0)
@@ -266,9 +243,9 @@ proc main =
   
   # save image
   let fs = newFileStream("Image.raw", FMWrite)
-  fs.writeData(cast[pointer](image), pixelsSize)
+  fs.writeData(cast[pointer](image), pixmapSize)
 
 # ---
 
 when isMainModule:
-  main()
+  main() # run program
