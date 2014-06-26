@@ -14,6 +14,8 @@ type Vec3 =
 
 # ---
 
+template zero(T:type Vec3): Vec3 = (0.0, 0.0, 0.0)
+
 {.push inline, noInit.}
 
 proc `-`(v:Vec3): Vec3 = (-v.x, -v.y, -v.z)
@@ -35,9 +37,13 @@ proc `+=`(this:var Vec3, v:Vec3) =
 proc dot(a, b:Vec3): float = (a.x * b.x) + (a.y * b.y) + (a.z * b.z)
 proc normalize(v:Vec3): Vec3 = v / sqrt(dot(v, v))
 
-{.pop.}
+converter toVec3[
+  X: TReal|TInteger,
+  Y: TReal|TInteger,
+  Z: TReal|TInteger](
+    T:tuple[x:X, y:Y, z:Z]): Vec3 = (float(T.x), float(T.y), float(T.z))
 
-template zero(T:type Vec3): Vec3 = (0.0, 0.0, 0.0)
+{.pop.}
 
 # ---------- ---------- ---------- #
 
@@ -221,17 +227,14 @@ proc main =
   let image = new Pixmap
   
   # add geometry
-  scene.objects.add Sphere(pos:(0.0, -10002.0, -20.0), radius:10000, color:(0.8, 0.8, 0.8))
-  scene.objects.add Sphere(pos:( 0.0,  2.0, -20.0), radius:4, color:(0.8, 0.5, 0.5), refl:0.5)
-  scene.objects.add Sphere(pos:( 5.0,  0.0, -15.0), radius:2, color:(0.3, 0.8, 0.8), refl:0.2)
-  scene.objects.add Sphere(pos:(-5.0,  0.0, -15.0), radius:2, color:(0.3, 0.5, 0.8), refl:0.2)
-  scene.objects.add Sphere(pos:(-2.0, -1.0, -10.0), radius:1, color:(0.1, 0.1, 0.1), refl:0.1, tran:0.8)
+  scene.objects.add Sphere(pos:(0, -10002, -20), radius:10000, color:(0.8, 0.8, 0.8))
+  scene.objects.add Sphere(pos:( 0,  2, -20), radius:4, color:(0.8, 0.5, 0.5), refl:0.5)
+  scene.objects.add Sphere(pos:( 5,  0, -15), radius:2, color:(0.3, 0.8, 0.8), refl:0.2)
+  scene.objects.add Sphere(pos:(-5,  0, -15), radius:2, color:(0.3, 0.5, 0.8), refl:0.2)
+  scene.objects.add Sphere(pos:(-2, -1, -10), radius:1, color:(0.1, 0.1, 0.1), refl:0.1, tran:0.8)
   
   # add light
-  scene.lights.add Light (
-    pos:(-10.0, 20.0, 30.0),
-    color:(2.0, 2.0, 2.0)
-  )
+  scene.lights.add Light(pos:(-10, 20, 30), color:(2, 2, 2))
   
   # run test
   echo "Starting test..."
