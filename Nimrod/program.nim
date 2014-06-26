@@ -14,7 +14,7 @@ type Vec3 =
 
 # ---
 
-{.push inline, noInit, noSideEffect.}
+{.push inline, noInit.}
 
 proc `-`(v:Vec3): Vec3 = (-v.x, -v.y, -v.z)
 
@@ -32,13 +32,13 @@ proc `+=`(this:var Vec3, v:Vec3) =
   this.y += v.y
   this.z += v.z
 
+proc dot(a, b:Vec3): float = (a.x * b.x) + (a.y * b.y) + (a.z * b.z)
+proc normalize(v:Vec3): Vec3 = v / sqrt(dot(v, v))
+
 {.pop.}
 
 template zero(T:type Vec3): Vec3 = (0.0, 0.0, 0.0)
 
-template dot(a, b:Vec3): float = (a.x * b.x) + (a.y * b.y) + (a.z * b.z)
-template normalize(v:Vec3): Vec3 = v / sqrt(dot(v, v))
-  
 # ---------- ---------- ---------- #
 
 type Ray =
@@ -52,13 +52,31 @@ type Sphere =
     radius: float
     refl, tran: float
 
+type Light =
+  ref object
+    pos, color: Vec3
+
+type Scene =
+  ref object
+    objects: seq[Sphere]
+    lights: seq[Light]
+
 # ---
 
-proc normal(this:Sphere, pos:Vec3): Vec3 {.inline, noInit.} =
+proc new(T:type Scene): Scene =
+  new result
+  result.objects = @[]
+  result.lights = @[]
+
+# ---
+
+{.push noInit.}
+
+proc normal(this:Sphere, pos:Vec3): Vec3 {.inline.} =
   return normalize(pos - this.pos)
 
 
-proc intersect(this:Sphere, ray:Ray): bool {.noInit.} =
+proc intersect(this:Sphere, ray:Ray): bool =
   let d = this.pos - ray.pos
   let a = dot(d, ray.dir)
   if a < 0: # opposite direction
@@ -72,7 +90,7 @@ proc intersect(this:Sphere, ray:Ray): bool {.noInit.} =
   return true
 
 
-proc intersect(this:Sphere, ray:Ray, distance:var float): bool {.noInit.} =
+proc intersect(this:Sphere, ray:Ray, distance:var float): bool =
   distance = 0
   
   let d = this.pos - ray.pos
@@ -93,27 +111,8 @@ proc intersect(this:Sphere, ray:Ray, distance:var float): bool {.noInit.} =
   
   return true
 
-# ---------- ---------- ---------- #
 
-type Light =
-  ref object
-    pos, color: Vec3
-
-type Scene =
-  ref object
-    objects: seq[Sphere]
-    lights: seq[Light]
-
-# ---
-
-proc new(T:type Scene): Scene =
-  new result
-  result.objects = @[]
-  result.lights = @[]
-
-# ---
-
-proc trace(this:Ray, scene:Scene, depth:int): Vec3 {.noInit.} = 
+proc trace(this:Ray, scene:Scene, depth:int): Vec3 = 
   var nearest = inf
   var obj: Sphere
   
@@ -182,6 +181,8 @@ proc trace(this:Ray, scene:Scene, depth:int): Vec3 {.noInit.} =
   
   return color
 
+{.pop.}
+
 # ---------- ---------- ---------- #
 
 const pixmapSize = width * height * 3
@@ -197,6 +198,7 @@ proc render(this:ref Pixmap, scene:Scene) =
     for x in 0 .. width-1:
       let wf: float = width
       let hf: float = height
+      
       let dir: Vec3 = (
         x: ((float(x) - (wf / 2.0)) / wf) * w,
         y: (((hf / 2.0) - float(y)) / hf) * h,
@@ -207,9 +209,9 @@ proc render(this:ref Pixmap, scene:Scene) =
       let pixel = ray.trace(scene, 0)
       let index: int = (x * 3) + (y * width * 3)
       
-      this[index]   = min(pixel.x * 255, 255).byte
-      this[index+1] = min(pixel.y * 255, 255).byte
-      this[index+2] = min(pixel.z * 255, 255).byte
+      this[index]   = byte min(pixel.x * 255, 255)
+      this[index+1] = byte min(pixel.y * 255, 255)
+      this[index+2] = byte min(pixel.z * 255, 255)
 
 # ---------- ---------- ---------- #
 
