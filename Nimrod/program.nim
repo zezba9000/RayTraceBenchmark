@@ -1,10 +1,21 @@
 
 import Math, Times, Streams, StrUtils
 
-const width    = 1280
-const height   = 720
+when defined(bigImgMT):
+  import ThreadPool
+
+# ---
+
 const depthMax = 6
-const fov      = 45.0
+const fov = 45.0
+
+when defined(bigImg) or defined(bigImgMT):
+  const tiles  = 8
+  const width  = 1280 * 8
+  const height = 720 * 8
+else:
+  const width  = 1280
+  const height = 720
 
 # ---------- ---------- ---------- #
 
@@ -156,34 +167,34 @@ proc trace(this:Ray, scene:Scene, depth:int): Vec3 =
         break
     
     if not blocked:
-      color += light.color * max(0.0, dot(normal, lightDir)) *
-        obj.color * (1.0 - reflRatio)
+      color += light.color * max(0, dot(normal, lightDir)) *
+        obj.color * (1 - reflRatio)
   
   let rayNormDot = dot(this.dir, normal)
-  let facing = max(0.0, -rayNormDot)
-  let fresnel = reflRatio + ((1.0 - reflRatio) * pow((1.0 - facing), 5.0))
+  let facing = max(0, -rayNormDot)
+  let fresnel = reflRatio + ((1 - reflRatio) * pow((1 - facing), 5))
   
   # compute reflection
   if depth < depthMax and reflRatio > 0:
-    let reflDir = this.dir + (normal * 2 * rayNormDot * -1.0)
+    let reflDir = this.dir + (normal * 2 * rayNormDot * -1)
     let tr = Ray(pos:hitPoint + (normal * 1.0e-5), dir:reflDir)
     color += tr.trace(scene, depth + 1) * fresnel
   
   # compute refraction
   if depth < depthMax and obj.tran > 0:
-    const iorDefault = 1.0 / 1.5
+    const iorDefault = 1 / 1.5
     let ior = if inside: iorDefault else: 1.5
-    let ce = dot(this.dir, normal) * -1.0
-    let eta = 1.0 / ior
+    let ce = dot(this.dir, normal) * -1
+    let eta = 1 / ior
     let gf = (this.dir + normal * ce) * eta
-    let sin_t1_2 = 1.0 - (ce * ce)
+    let sin_t1_2 = 1 - (ce * ce)
     let sin_t2_2 = sin_t1_2 * (eta * eta)
     
-    if sin_t2_2 < 1.0:
-      let gc = normal * sqrt(1.0 - sin_t2_2)
+    if sin_t2_2 < 1:
+      let gc = normal * sqrt(1 - sin_t2_2)
       let refrDir = gf - gc
       let tr = Ray(pos:hitPoint - (normal * 1.0e-4), dir:refrDir)
-      color += tr.trace(scene, depth + 1) * (1.0 - fresnel) * obj.tran
+      color += tr.trace(scene, depth + 1) * (1 - fresnel) * obj.tran
   
   return color
 
@@ -196,19 +207,16 @@ type Pixmap = array[pixmapSize, byte]
 
 # ---
 
-proc render(this:ref Pixmap, scene:Scene) =
-  let h = tan(((fov / 360.0) * (2.0 * Pi)) / 2.0) * 2.0
-  let w = h * width / height
+proc renderRegion(this:ptr Pixmap, scene:Scene, w, h:float, sx, sy, ex, ey:int) =
+  let wf: float = width
+  let hf: float = height
   
-  for y in 0 .. height-1:
-    for x in 0 .. width-1:
-      let wf: float = width
-      let hf: float = height
-      
+  for y in sy .. ey:
+    for x in sx .. ex:
       let dir: Vec3 = (
-        x: ((float(x) - (wf / 2.0)) / wf) * w,
-        y: (((hf / 2.0) - float(y)) / hf) * h,
-        z: -1.0
+        x: ((float(x) - (wf / 2)) / wf) * w,
+        y: (((hf / 2) - float(y)) / hf) * h,
+        z: -1
       ).normalize()
       
       let ray = Ray(pos:Vec3.zero, dir:dir)
@@ -218,6 +226,26 @@ proc render(this:ref Pixmap, scene:Scene) =
       this[index]   = byte min(pixel.x * 255, 255)
       this[index+1] = byte min(pixel.y * 255, 255)
       this[index+2] = byte min(pixel.z * 255, 255)
+
+
+proc render(this:ref Pixmap, scene:Scene) =
+  let h = tan(((fov / 360) * (2 * Pi)) / 2) * 2
+  let w = h * width / height
+  let pthis = cast[ptr Pixmap](this)
+  
+  when not defined(bigImgMT):
+    renderRegion(pthis, scene, w, h, 0, 0, width-1, height-1)
+  else:
+    let sizeW = int(width / tiles)
+    let sizeH = int(height / tiles)
+    parallel:
+      for y in 0 .. <tiles:
+        for x in 0 .. <tiles:
+          let sx = x * sizeW
+          let sy = y * sizeH
+          let ex = (sx + sizeW) - 1
+          let ey = (sy + sizeH) - 1
+          spawn renderRegion(pthis, scene, w, h, sx, sy, ex, ey)
 
 # ---------- ---------- ---------- #
 
@@ -239,16 +267,17 @@ proc main =
   # run test
   echo "Starting test..."
   
-  let start = (cpuTime() * 1000.0)
+  let begin = epochTime()
   image.render(scene)
-  let duration = (cpuTime() * 1000.0) - start
+  let finish = epochTime()
   
-  echo "Mil: ", duration.formatFloat(FFDecimal, 1)
-  echo "Sec: ", (duration / 1000.0).formatFloat(FFDecimal, 2)
+  echo "Seconds: ", (finish - begin).formatFloat(FFDecimal, 2)
   
-  # save image
-  let fs = newFileStream("Image.raw", FMWrite)
-  fs.writeData(cast[pointer](image), pixmapSize)
+  when not defined(noSave):
+    # save image
+    let fs = newFileStream("image.rgb", FMWrite)
+    fs.writeData(cast[pointer](image), pixmapSize)
+    fs.close()
 
 # ---
 
