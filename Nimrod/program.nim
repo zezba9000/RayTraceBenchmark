@@ -268,10 +268,21 @@ proc main =
   echo "Starting test..."
   
   let begin = epochTime()
-  for i in 1..20: image.render(scene)
+  
+  when defined(averageRuns):
+    for i in 1..20:
+      image.render(scene)
+  else:
+    image.render(scene)
+    
   let finish = epochTime()
   
-  echo "Seconds: ", ((finish - begin) / 20).formatFloat(FFDecimal, 3)
+  var elapsedTime = finish - begin
+  
+  when defined(averageRuns):
+    elapsedTime /= 20
+  
+  echo "Seconds: ", (elapsedTime).formatFloat(FFDecimal, 3)
   
   when not defined(noSave):
     # save image
