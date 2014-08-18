@@ -273,7 +273,7 @@ proc main =
   let begin = epochTime()
   
   when defined(averageRuns):
-    for i in 1..20:
+    for i in 1..runs:
       image.render(scene)
   else:
     image.render(scene)
