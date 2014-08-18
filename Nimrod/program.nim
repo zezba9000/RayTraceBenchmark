@@ -9,8 +9,10 @@ when defined(bigImgMT):
 const depthMax = 6
 const fov = 45.0
 
-when defined(averageRuns):
-  const runs = 20
+when defined(avgRuns):
+  const runCount = 20
+else:
+  const runCount = 1
 
 when defined(bigImg) or defined(bigImgMT):
   const tiles  = 8
@@ -268,24 +270,13 @@ proc main =
   scene.lights.add Light(pos:(-10, 20, 30), color:(2, 2, 2))
   
   # run test
-  echo "Starting test..."
-  
   let begin = epochTime()
-  
-  when defined(averageRuns):
-    for i in 1..runs:
-      image.render(scene)
-  else:
-    image.render(scene)
-    
+  for i in 1 .. runCount: image.render(scene)
   let finish = epochTime()
   
-  var elapsedTime = finish - begin
-  
-  when defined(averageRuns):
-    elapsedTime /= runs
-  
-  echo "Seconds: ", (elapsedTime).formatFloat(FFDecimal, 3)
+  # print results
+  var elapsed = when defined(avgRuns): (finish - begin) / runCount else: (finish - begin)
+  echo "Seconds: ", elapsed.formatFloat(FFDecimal, 3)
   
   when not defined(noSave):
     # save image
