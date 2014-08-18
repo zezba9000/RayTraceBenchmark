@@ -9,6 +9,9 @@ when defined(bigImgMT):
 const depthMax = 6
 const fov = 45.0
 
+when defined(averageRuns):
+  const runs = 20
+
 when defined(bigImg) or defined(bigImgMT):
   const tiles  = 8
   const width  = 1280 * 8
@@ -268,10 +271,21 @@ proc main =
   echo "Starting test..."
   
   let begin = epochTime()
-  image.render(scene)
+  
+  when defined(averageRuns):
+    for i in 1..runs:
+      image.render(scene)
+  else:
+    image.render(scene)
+    
   let finish = epochTime()
   
-  echo "Seconds: ", (finish - begin).formatFloat(FFDecimal, 2)
+  var elapsedTime = finish - begin
+  
+  when defined(averageRuns):
+    elapsedTime /= runs
+  
+  echo "Seconds: ", (elapsedTime).formatFloat(FFDecimal, 3)
   
   when not defined(noSave):
     # save image
