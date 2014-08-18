@@ -3,7 +3,9 @@ Nimrod Results
 
 AMD Phenom II X4 920 2.8Ghz (x64)
 ---
-- Nimrod 0.9.5 (Arch Linux, GCC 4.9.1) - **0.305s** avg
+- Nimrod 0.9.5 (Arch Linux, GCC 4.9.1) - **0.305s**
+- Nimrod 0.9.5 (Arch Linux, GCC 4.9.1)(bigImg) - **19.540s**
+- Nimrod 0.9.5 (Arch Linux, GCC 4.9.1)(bigImgMT) - **4.951s**
 
 AMD Phenom II X4 965 3.2Ghz (x64)
 ---
