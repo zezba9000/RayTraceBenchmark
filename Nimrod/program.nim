@@ -9,6 +9,9 @@ when defined(bigImgMT):
 const depthMax = 6
 const fov = 45.0
 
+when defined(averageRuns):
+  const runs = 20
+
 when defined(bigImg) or defined(bigImgMT):
   const tiles  = 8
   const width  = 1280 * 8
@@ -280,7 +283,7 @@ proc main =
   var elapsedTime = finish - begin
   
   when defined(averageRuns):
-    elapsedTime /= 20
+    elapsedTime /= runs
   
   echo "Seconds: ", (elapsedTime).formatFloat(FFDecimal, 3)
   
