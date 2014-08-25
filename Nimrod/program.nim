@@ -86,7 +86,7 @@ type Scene =
 # ---
 
 proc new(T:type Scene): Scene =
-  new result
+  result.new()
   result.objects = @[]
   result.lights = @[]
 
@@ -221,12 +221,12 @@ proc renderRegion(this:ptr Pixmap, scene:Scene, w, h:float, sx, sy, ex, ey:int) 
       let dir: Vec3 = (
         x: ((float(x) - (wf / 2)) / wf) * w,
         y: (((hf / 2) - float(y)) / hf) * h,
-        z: -1
+        z: -1.0
       ).normalize()
       
       let ray = Ray(pos:Vec3.zero, dir:dir)
       let pixel = ray.trace(scene, 0)
-      let index: int = (x * 3) + (y * width * 3)
+      let index = (x * 3) + (y * width * 3)
       
       this[index]   = byte min(pixel.x * 255, 255)
       this[index+1] = byte min(pixel.y * 255, 255)
