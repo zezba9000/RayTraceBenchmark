@@ -18,6 +18,6 @@ Cpp Results:
 ---
 https://github.com/zezba9000/RayTraceBenchmark/blob/master/Cpp/Results.md
 
-Nimrod Results:
+Nim Results:
 ---
-https://github.com/zezba9000/RayTraceBenchmark/blob/master/Nimrod/Results.md
+https://github.com/zezba9000/RayTraceBenchmark/blob/master/Nim/Results.md

@@ -1,8 +1,8 @@
 
-import Math, Times, Streams, StrUtils
+import math, times, streams, strutils
 
 when defined(bigImgMT):
-  import ThreadPool
+  import threadpool
 
 # ---
 
@@ -53,11 +53,8 @@ proc `+=`(this:var Vec3, v:Vec3) =
 proc dot(a, b:Vec3): float = (a.x * b.x) + (a.y * b.y) + (a.z * b.z)
 proc normalize(v:Vec3): Vec3 = v / sqrt(dot(v, v))
 
-converter toVec3[
-  X: TReal|TInteger,
-  Y: TReal|TInteger,
-  Z: TReal|TInteger](
-    T:tuple[x:X, y:Y, z:Z]): Vec3 = (float(T.x), float(T.y), float(T.z))
+converter toVec3[X, Y, Z:SomeNumber](t:tuple[x:X, y:Y, z:Z]): Vec3 =
+  (float(t.x), float(t.y), float(t.z))
 
 {.pop.}
 
@@ -135,12 +132,12 @@ proc intersect(this:Sphere, ray:Ray, distance:var float): bool =
 
 
 proc trace(this:Ray, scene:Scene, depth:int): Vec3 = 
-  var nearest = inf
+  var nearest = Inf
   var obj: Sphere
   
   # search the scene for nearest intersection
   for o in scene.objects:
-    var distance = inf
+    var distance = Inf
     if o.intersect(this, distance):
       if distance < nearest:
         nearest = distance
@@ -212,7 +209,7 @@ type Pixmap = array[pixmapSize, byte]
 
 # ---
 
-proc renderRegion(this:ptr Pixmap, scene:Scene, w, h:float, sx, sy, ex, ey:int) =
+proc renderRegion(this:ref Pixmap, scene:Scene, w, h:float, sx, sy, ex, ey:int) =
   let wf: float = width
   let hf: float = height
   
@@ -236,10 +233,9 @@ proc renderRegion(this:ptr Pixmap, scene:Scene, w, h:float, sx, sy, ex, ey:int) 
 proc render(this:ref Pixmap, scene:Scene) =
   let h = tan(((fov / 360) * (2 * Pi)) / 2) * 2
   let w = h * width / height
-  let pthis = cast[ptr Pixmap](this)
   
   when not defined(bigImgMT):
-    renderRegion(pthis, scene, w, h, 0, 0, width-1, height-1)
+    renderRegion(this, scene, w, h, 0, 0, width-1, height-1)
   else:
     let sizeW = int(width / tiles)
     let sizeH = int(height / tiles)
@@ -248,9 +244,9 @@ proc render(this:ref Pixmap, scene:Scene) =
         for x in 0 .. <tiles:
           let sx = x * sizeW
           let sy = y * sizeH
-          let ex = (sx + sizeW) - 1
-          let ey = (sy + sizeH) - 1
-          spawn renderRegion(pthis, scene, w, h, sx, sy, ex, ey)
+          let ex = sx + sizeW - 1
+          let ey = sy + sizeH - 1
+          spawn renderRegion(this, scene, w, h, sx, sy, ex, ey)
 
 # ---------- ---------- ---------- #
 
@@ -275,12 +271,13 @@ proc main =
   let finish = epochTime()
   
   # print results
-  var elapsed = when defined(avgRuns): (finish - begin) / runCount else: (finish - begin)
-  echo "Seconds: ", elapsed.formatFloat(FFDecimal, 3)
+  var elapsed = (finish - begin)
+  when defined(avgRuns): elapsed /= runCount
+  echo "Seconds: ", elapsed.formatFloat(ffDecimal, 3)
   
   when not defined(noSave):
     # save image
-    let fs = newFileStream("image.rgb", FMWrite)
+    let fs = newFileStream("image.rgb", fmWrite)
     fs.writeData(cast[pointer](image), pixmapSize)
     fs.close()
 
