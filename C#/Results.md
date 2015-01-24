@@ -131,6 +131,12 @@ Xamarin.iOS 7.0.2.7 (iOS 7.0.3 [LLVM=No])
 Xamarin.iOS 7.0.2.7 (iOS 7.0.3 [LLVM=Yes])
 (ARMv7) 8.708 sec
 
+Unity3D 4.6.1p5 - IL2CPP
+(ARMv7) 22.35 sec.
+
+Unity3D 4.6.1p5 - Mono
+(ARMv7) 10.206 sec.
+
 
 iPhone 3Gs
 ---
