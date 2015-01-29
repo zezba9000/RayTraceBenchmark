@@ -123,7 +123,7 @@ Xamarin.Android 4.8.3 (Android 2.2.1)
 (ARMv6) 359.878 sec
 
 
-iPad Mini
+iPad Mini (1st Gen)
 ---
 Xamarin.iOS 7.0.2.7 (iOS 7.0.3 [LLVM=No])
 (ARMv7) 9.308 sec
