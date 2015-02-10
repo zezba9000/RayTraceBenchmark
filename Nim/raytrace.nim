@@ -108,8 +108,6 @@ proc intersect(sphere:Sphere, ray:Ray): bool =
 
 
 proc intersect(sphere:Sphere, ray:Ray, distance:var float): bool =
-  distance = 0
-  
   let d = sphere.pos - ray.pos
   let a = dot(d, ray.dir)
   if a < 0: # opposite direction
@@ -135,7 +133,7 @@ proc trace(ray:Ray, scene:Scene, depth:int): Vec3 =
   
   # search the scene for nearest intersection
   for o in scene.objects:
-    var distance = Inf
+    var distance: float
     if o.intersect(ray, distance):
       if distance < nearest:
         nearest = distance
