@@ -99,9 +99,9 @@ proc intersect(sphere:Sphere, ray:Ray): bool =
   if a < 0: # opposite direction
     return false
 
-  let b2 = dot(d, d) - (a * a)
-  let r2 = sphere.radius * sphere.radius
-  if b2 > r2: # perpendicular > r
+  let b = dot(d, d) - (a * a)
+  let r = sphere.radius * sphere.radius
+  if b > r: # perpendicular > r
     return false
   
   return true
@@ -111,11 +111,13 @@ proc intersect(sphere:Sphere, ray:Ray, distance:var float): bool =
   let d = sphere.pos - ray.pos
   let a = dot(d, ray.dir)
   if a < 0: # opposite direction
+    distance = 0
     return false
   
   let b = dot(d, d) - (a * a)
   let r = sphere.radius * sphere.radius
   if b > r: # perpendicular > r
+    distance = 0
     return false
   
   let c = sqrt(r - b)
