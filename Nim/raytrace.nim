@@ -30,7 +30,7 @@ type Vec3 = tuple[x, y, z:float]
 
 template zero(T:type Vec3): Vec3 = (0.0, 0.0, 0.0)
 
-{.push inline, noInit.}
+{.push inline noInit.}
 
 proc `-`(v:Vec3): Vec3 = (-v.x, -v.y, -v.z)
 
@@ -202,8 +202,11 @@ proc trace(ray:Ray, scene:Scene, depth:int): Vec3 =
 
 # ---------- ---------- ---------- #
 
-const pixmapSize = width * height * 3
-type Pixmap = array[pixmapSize, byte]
+const
+  pixmapSize = width * height * 3
+
+type
+  Pixmap = array[pixmapSize, byte]
 
 # ---
 
@@ -233,7 +236,7 @@ proc render(pixmap:ref Pixmap, scene:Scene) =
   let w = h * width / height
   
   when not defined(bigImgMT):
-    renderRegion(pixmap, scene, w, h, 0, 0, width-1, height-1)
+    renderRegion(pixmap, scene, w, h, 0, 0, <width, <height)
   else:
     let sizeW = int(width / tiles)
     let sizeH = int(height / tiles)
@@ -242,8 +245,8 @@ proc render(pixmap:ref Pixmap, scene:Scene) =
         for x in 0 .. <tiles:
           let sx = x * sizeW
           let sy = y * sizeH
-          let ex = sx + sizeW - 1
-          let ey = sy + sizeH - 1
+          let ex = sx + <sizeW
+          let ey = sy + <sizeH
           spawn renderRegion(pixmap, scene, w, h, sx, sy, ex, ey)
 
 # ---------- ---------- ---------- #
@@ -276,7 +279,7 @@ proc main =
   when not defined(noSave):
     # save image
     let fs = newFileStream("image.rgb", fmWrite)
-    fs.writeData(cast[pointer](image), pixmapSize)
+    fs.writeData(addr image[], pixmapSize)
     fs.close()
 
 # ---
