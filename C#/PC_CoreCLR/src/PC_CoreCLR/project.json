@@ -1,7 +1,9 @@
 {
   "version": "1.0.0-*",
   "buildOptions": {
-    "emitEntryPoint": true
+			"emitEntryPoint": true,
+			"define": [ "WIN32" ],
+			"optimize": true
   },
 
   "dependencies": {
