@@ -9,6 +9,7 @@ ipch/
 Library/
 TEMP/
 Help/
+.vs/
 
 # Files
 Reign.Android.zip
