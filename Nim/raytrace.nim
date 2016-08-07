@@ -2,6 +2,7 @@
 import math, times, streams, strutils
 
 when defined(bigImgMT):
+  {.experimental.}
   import threadpool
 
 # ---
@@ -210,7 +211,7 @@ type
 
 # ---
 
-proc renderRegion(pixmap:ref Pixmap, scene:Scene, w, h:float, sx, sy, ex, ey:int) =
+proc renderRegion(pixmap:ptr Pixmap, scene:Scene, w, h:float, sx, sy, ex, ey:int) =
   let wf: float = width
   let hf: float = height
   
@@ -232,11 +233,15 @@ proc renderRegion(pixmap:ref Pixmap, scene:Scene, w, h:float, sx, sy, ex, ey:int
 
 
 proc render(pixmap:ref Pixmap, scene:Scene) =
+  # cast to unsafe ptr type to avoid Nim from
+  # deep-coping the pixelmap for earch renderRegion call
+  let pm = cast[ptr Pixmap](pixmap)
+  
   let h = tan(((fov / 360) * (2 * Pi)) / 2) * 2
   let w = h * width / height
   
   when not defined(bigImgMT):
-    renderRegion(pixmap, scene, w, h, 0, 0, <width, <height)
+    renderRegion(pm, scene, w, h, 0, 0, <width, <height)
   else:
     let sizeW = int(width / tiles)
     let sizeH = int(height / tiles)
@@ -247,7 +252,7 @@ proc render(pixmap:ref Pixmap, scene:Scene) =
           let sy = y * sizeH
           let ex = sx + <sizeW
           let ey = sy + <sizeH
-          spawn renderRegion(pixmap, scene, w, h, sx, sy, ex, ey)
+          spawn renderRegion(pm, scene, w, h, sx, sy, ex, ey)
 
 # ---------- ---------- ---------- #
 
