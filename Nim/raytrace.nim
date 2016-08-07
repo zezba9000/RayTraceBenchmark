@@ -233,8 +233,8 @@ proc renderRegion(pixmap:ptr Pixmap, scene:Scene, w, h:float, sx, sy, ex, ey:int
 
 
 proc render(pixmap:ref Pixmap, scene:Scene) =
-  # cast to unsafe ptr type to avoid Nim from
-  # deep-coping the pixelmap for earch renderRegion call
+  # cast to unsafe ptr type to avoid the 'parallel' macro
+  # from deep-copying the pixmap for earch `renderRegion` call
   let pm = cast[ptr Pixmap](pixmap)
   
   let h = tan(((fov / 360) * (2 * Pi)) / 2) * 2
