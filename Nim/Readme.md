@@ -8,7 +8,7 @@ Default Compile
 
 8x Resolution Multi-Threaded
 ---
-`$ nim c -d:{release,bigImgMT} raytrace`
+`$ nim c -d:{release,bigImgMT} --threads:on raytrace`
 
 Optional Defines
 ---

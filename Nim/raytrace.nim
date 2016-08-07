@@ -3,7 +3,7 @@ import math, times, streams, strutils
 
 when defined(bigImgMT):
   {.experimental.}
-  import threadpool
+  import threadpool, cpuinfo
 
 # ---
 
@@ -16,7 +16,7 @@ else:
   const runCount = 1
 
 when defined(bigImg) or defined(bigImgMT):
-  const tiles  = 8
+  let jobCount = countProcessors() * 2
   const width  = 1280 * 8
   const height = 720 * 8
 else:
@@ -243,11 +243,11 @@ proc render(pixmap:ref Pixmap, scene:Scene) =
   when not defined(bigImgMT):
     renderRegion(pm, scene, w, h, 0, 0, <width, <height)
   else:
-    let sizeW = int(width / tiles)
-    let sizeH = int(height / tiles)
+    let sizeW = int(width / jobCount)
+    let sizeH = int(height / jobCount)
     parallel:
-      for y in 0 .. <tiles:
-        for x in 0 .. <tiles:
+      for y in 0 .. <jobCount:
+        for x in 0 .. <jobCount:
           let sx = x * sizeW
           let sy = y * sizeH
           let ex = sx + <sizeW
