@@ -25,24 +25,22 @@ else:
 
 # ---------- ---------- ---------- #
 
-type Vec3 = tuple[x, y, z:float]
+type Vec3 = object
+  x, y, z: float
 
 # ---
 
-template zero(T:type Vec3): Vec3 = (0.0, 0.0, 0.0)
-
 {.push inline noInit.}
 
-proc `-`(v:Vec3): Vec3 = (-v.x, -v.y, -v.z)
+proc `-`(v:Vec3): Vec3 = Vec3(x: -v.x, y: -v.y, z: -v.z)
 
-proc `+`(a, b:Vec3): Vec3 = (a.x + b.x, a.y + b.y, a.z + b.z)
-proc `-`(a, b:Vec3): Vec3 = (a.x - b.x, a.y - b.y, a.z - b.z)
+proc `*`(a:Vec3, b:float): Vec3 = Vec3(x: a.x * b, y: a.y * b, z: a.z * b)
+proc `/`(a:Vec3, b:float): Vec3 = Vec3(x: a.x / b, y: a.y / b, z: a.z / b)
 
-proc `*`(a, b:Vec3): Vec3 = (a.x * b.x, a.y * b.y, a.z * b.z)
-proc `*`(a:Vec3, b:float): Vec3 = (a.x * b, a.y * b, a.z * b)
-
-proc `/`(a, b:Vec3): Vec3 = (a.x / b.x, a.y / b.y, a.z / b.z)
-proc `/`(a:Vec3, b:float): Vec3 = (a.x / b, a.y / b, a.z / b)
+proc `+`(a, b:Vec3): Vec3 = Vec3(x: a.x + b.x, y: a.y + b.y, z: a.z + b.z)
+proc `-`(a, b:Vec3): Vec3 = Vec3(x: a.x - b.x, y: a.y - b.y, z: a.z - b.z)
+proc `*`(a, b:Vec3): Vec3 = Vec3(x: a.x * b.x, y: a.y * b.y, z: a.z * b.z)
+proc `/`(a, b:Vec3): Vec3 = Vec3(x: a.x / b.x, y: a.y / b.y, z: a.z / b.z)
 
 proc `+=`(a:var Vec3, b:Vec3) =
   a.x += b.x
@@ -53,7 +51,7 @@ proc dot(a, b:Vec3): float = (a.x * b.x) + (a.y * b.y) + (a.z * b.z)
 proc normalize(v:Vec3): Vec3 = v / sqrt(dot(v, v))
 
 converter toVec3[T:SomeNumber](v:tuple[x:T, y:T, z:T]): Vec3 =
-  (float(v.x), float(v.y), float(v.z))
+  Vec3(x: float(v.x), y: float(v.y), z: float(v.z))
 
 {.pop.}
 
@@ -143,7 +141,7 @@ proc trace(ray:Ray, scene:Scene, depth:int): Vec3 =
         obj = o
   
   if obj == nil:
-    return Vec3.zero
+    return Vec3()
   
   let hitPoint = ray.pos + (ray.dir * nearest)
   var normal = obj.normal(hitPoint)
@@ -153,7 +151,7 @@ proc trace(ray:Ray, scene:Scene, depth:int): Vec3 =
     inside = true
     normal = -normal
   
-  var color = Vec3.zero
+  var color: Vec3
   let reflRatio = obj.refl
   
   for light in scene.lights:
@@ -223,7 +221,7 @@ proc renderRegion(pixmap:ptr Pixmap, scene:Scene, w, h:float, sx, sy, ex, ey:int
         z: -1.0
       ).normalize()
       
-      let ray = Ray(pos:Vec3.zero, dir:dir)
+      let ray = Ray(pos:Vec3(), dir:dir)
       let pixel = ray.trace(scene, 0)
       let index = (x * 3) + (y * width * 3)
       
