@@ -1,7 +1,35 @@
 C# Results
 ===
 
-AMD FX-8350 8-Core 4.00ghz
+Intel i7-4790K 4.00GHz
+---
+Unity3D 2017.1.0f3 - Mono 2.0-2.6'ish (.NET 3.5)
+(x86) 0.74 sec
+
+Unity3D 2017.1.0f3 - Mono 2.0-2.6'ish (.NET 3.5)
+(x64) 0.71 sec
+
+Unity3D 2017.1.0f3 - Mono 4.8 (.NET 4.6)
+(x86) 0.56 sec
+
+Unity3D 2017.1.0f3 - Mono 4.8 (.NET 4.6)
+(x64) 0.74 sec
+
+Intel i5-6200U 2.30GHz
+---
+Unity3D 2017.1.0f3 - Mono 2.0-2.6'ish (.NET 3.5)
+(x86) 1.5 sec
+
+Unity3D 2017.1.0f3 - Mono 2.0-2.6'ish (.NET 3.5)
+(x64) 1.5 sec
+
+Unity3D 2017.1.0f3 - Mono 4.8 (.NET 4.6)
+(x86) 1.1 sec
+
+Unity3D 2017.1.0f3 - Mono 4.8 (.NET 4.6)
+(x64) 1.8 sec
+
+AMD FX-8350 8-Core 4.00GHz
 ---
 Unity3D 2017.1.0f3 - Mono 2.0-2.6'ish (.NET 3.5)
 (x86) 1.26 sec
