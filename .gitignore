@@ -3,6 +3,8 @@
 [Rr]elease*/
 Device-Release*/
 [Bb]in/
+[Bb]uild/
+[Bb]uilds/
 obj/
 Lib/
 ipch/

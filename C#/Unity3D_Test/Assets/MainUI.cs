@@ -1,10 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Reflection;
 
 public class MainUI : MonoBehaviour
 {
+	private bool didPrint;
+	private void PrintMonoVersion()
+	{
+		if (didPrint) return;
+		didPrint = true;
+
+		var type = Type.GetType("Mono.Runtime");
+		if (type != null)
+		{
+			var displayName = type.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+			if (displayName != null) Debug.Log("Mono version: " + displayName.Invoke(null, null));
+		}
+	}
+
 	void OnGUI ()
 	{
+		PrintMonoVersion();
+
 		if (GUI.Button(new Rect(0, 0, 128, 64), "Start"))
 		{
 			var pixels = RayTraceBenchmark.BenchmarkMain.Start();

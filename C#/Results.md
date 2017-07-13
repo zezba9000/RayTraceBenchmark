@@ -1,6 +1,20 @@
 C# Results
 ===
 
+AMD FX-8350 8-Core 4.00ghz
+---
+Unity3D 2017.1.0f3 - Mono 2.0-2.6'ish (.NET 3.5)
+(x86) 1.26 sec
+
+Unity3D 2017.1.0f3 - Mono 2.0-2.6'ish (.NET 3.5)
+(x64) 1.15 sec
+
+Unity3D 2017.1.0f3 - Mono 4.8 (.NET 4.6)
+(x86) 1.0 sec
+
+Unity3D 2017.1.0f3 - Mono 4.8 (.NET 4.6)
+(x64) 1.18 sec
+
 AMD Phenom II X4 920 2.8Ghz
 ---
 Mono 3.2.3 (Arch Linux)
