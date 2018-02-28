@@ -16,9 +16,9 @@ using Windows.UI.Xaml.Navigation;
 using RayTraceBenchmark;
 using Windows.UI.Xaml.Media.Imaging;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace Win8_WinRT
+namespace UWP
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
