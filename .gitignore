@@ -46,7 +46,7 @@ _ReSharper*/
 *.csproj
 *.unityproj
 *.sln
-
+*.raw
 # Eclipse ---------------
 *.pydevproject
 #.project
