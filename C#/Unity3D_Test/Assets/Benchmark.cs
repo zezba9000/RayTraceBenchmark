@@ -423,7 +423,7 @@ namespace RayTraceBenchmark
 
 		public static string TimeToComplete = "???";
 
-		#if JSIL || UNITY_4_6 || UNITY_5 || UNITY_2017
+		#if JSIL || UNITY_4_6 || UNITY_5 || UNITY_2017 || UNITY_2018
 		public static byte[] Start()
 		#else
 		public static void Start()
@@ -472,7 +472,7 @@ namespace RayTraceBenchmark
 			// save image
 			#if WIN8 || WP8 || WP7 || ANDROID || IOS || VITA
 			if (SaveImageCallback != null) SaveImageCallback(data);
-			#elif !JSIL && !UNITY_4 && !UNITY_5 && !UNITY_2017
+			#elif !JSIL && !UNITY_4 && !UNITY_5 && !UNITY_2017 && !UNITY_2018
 			Console.ReadLine();
 			using (var file = new FileStream("Image.raw", FileMode.Create, FileAccess.Write))
 			using (var writer = new BinaryWriter(file))
