@@ -1,4 +1,5 @@
 ﻿//#define BIT64
+#define USE_OUT
 
 using System;
 using System.Runtime.InteropServices;
@@ -34,7 +35,80 @@ namespace RayTraceBenchmark
 			Z = z;
 		}
 
-		public static Vec3 operator+(Vec3 p1, Vec3 p2)
+		#if USE_OUT
+		public static void Add(Vec3 p1, Vec3 p2, out Vec3 result)
+		{
+			result.X = p1.X + p2.X;
+			result.Y = p1.Y + p2.Y;
+			result.Z = p1.Z + p2.Z;
+		}
+
+		public static void Sub(Vec3 p1, Vec3 p2, out Vec3 result)
+		{
+			result.X = p1.X - p2.X;
+			result.Y = p1.Y - p2.Y;
+			result.Z = p1.Z - p2.Z;
+		}
+
+		public static Vec3 operator-(Vec3 p1)
+		{
+			p1.X = -p1.X;
+			p1.Y = -p1.Y;
+			p1.Z = -p1.Z;
+			return p1;
+		}
+
+		public static void Mul(Vec3 p1, Vec3 p2, out Vec3 result)
+		{
+			result.X = p1.X * p2.X;
+			result.Y = p1.Y * p2.Y;
+			result.Z = p1.Z * p2.Z;
+		}
+
+		public static void Mul(Vec3 p1, Num p2, out Vec3 result)
+		{
+			result.X = p1.X * p2;
+			result.Y = p1.Y * p2;
+			result.Z = p1.Z * p2;
+		}
+
+		public static void Mul(Num p1, Vec3 p2, out Vec3 result)
+		{
+			result.X = p1 * p2.X;
+			result.Y = p1 * p2.Y;
+			result.Z = p1 * p2.Z;
+		}
+
+		public static void Div(Vec3 p1, Vec3 p2, out Vec3 result)
+		{
+			result.X = p1.X / p2.X;
+			result.Y = p1.Y / p2.Y;
+			result.Z = p1.Z / p2.Z;
+		}
+
+		public static void Div(Vec3 p1, Num p2, out Vec3 result)
+		{
+			result.X = p1.X / p2;
+			result.Y = p1.Y / p2;
+			result.Z = p1.Z / p2;
+		}
+
+		public static void Dot(Vec3 v1, Vec3 v2, out Num result)
+		{
+			result = (v1.X*v2.X) + (v1.Y*v2.Y) + (v1.Z*v2.Z);
+		}
+
+		public static void Magnitude(Vec3 v, out Num result)
+		{
+			result = (Num)Math.Sqrt((v.X*v.X) + (v.Y*v.Y) + (v.Z*v.Z));
+		}
+
+		public static void Normalize(Vec3 v, out Vec3 result)
+		{
+			Vec3.Div(v, (Num)Math.Sqrt((v.X*v.X) + (v.Y*v.Y) + (v.Z*v.Z)), out result);
+		}
+		#else
+		public static Vec3 operator +(Vec3 p1, Vec3 p2)
 		{
 			p1.X += p2.X;
 			p1.Y += p2.Y;
@@ -42,14 +116,14 @@ namespace RayTraceBenchmark
 			return p1;
 		}
 
-		public static Vec3 operator-(Vec3 p1, Vec3 p2)
+		public static Vec3 operator -(Vec3 p1, Vec3 p2)
 		{
 			p1.X -= p2.X;
 			p1.Y -= p2.Y;
 			p1.Z -= p2.Z;
 			return p1;
 		}
-
+		
 		public static Vec3 operator-(Vec3 p1)
 		{
 			p1.X = -p1.X;
@@ -112,6 +186,7 @@ namespace RayTraceBenchmark
 		{
 			return v / (Num)Math.Sqrt((v.X*v.X) + (v.Y*v.Y) + (v.Z*v.Z));
 		}
+		#endif
 	}
 
 	struct Ray
@@ -137,6 +212,64 @@ namespace RayTraceBenchmark
 			Transparency = trans;
 		}
 		
+		#if USE_OUT
+		public static void Normal(Sphere sphere, Vec3 pos, out Vec3 result)
+		{
+			Vec3.Sub(pos, sphere.Center, out var subResult);
+			Vec3.Normalize(subResult, out result);
+		}
+
+		public static void Intersect(Sphere sphere, Ray ray, out bool result)
+		{
+			Vec3.Sub(sphere.Center, ray.Org, out var l);
+			Vec3.Dot(l, ray.Dir, out Num a);
+			if (a < 0)              // opposite direction
+			{
+				result = false;
+				return;
+			}
+				
+			Vec3.Dot(l, l, out Num dotResult);
+			var b2 = dotResult - (a * a);
+			var r2 = sphere.Radius * sphere.Radius;
+			if (b2 > r2)            // perpendicular > r
+			{
+				result = false;
+				return;
+			}
+
+			result = true;
+		}
+
+		public static void Intersect(Sphere sphere, Ray ray, out Num distance, out bool result)
+		{
+			distance = 0;
+
+			Vec3.Sub(sphere.Center, ray.Org, out var l);
+			Vec3.Dot(l, ray.Dir, out Num a);
+			if (a < 0)              // opposite direction
+			{
+				result = false;
+				return;
+			}
+
+			Vec3.Dot(l, l, out Num dotResult);
+			var b2 = dotResult - (a * a);
+			var r2 = sphere.Radius * sphere.Radius;
+			if (b2 > r2)            // perpendicular > r
+			{
+				result = false;
+				return;
+			}
+
+			var c = (Num)Math.Sqrt(r2 - b2);
+			var near = a - c;
+			var far  = a + c;
+			distance = (near < 0) ? far : near;
+			// near < 0 means ray starts inside
+			result = true;
+		}
+		#else
 		public static Vec3 Normal(Sphere sphere, Vec3 pos)
 		{
 			return Vec3.Normalize(pos - sphere.Center);
@@ -178,6 +311,7 @@ namespace RayTraceBenchmark
 			// near < 0 means ray starts inside
 			return true;
 		}
+		#endif
 	}
 
 	class Light
@@ -206,6 +340,161 @@ namespace RayTraceBenchmark
 		private const int maxDepth = 6;
 		private const Num PI = (Num)Math.PI;
 
+		#if USE_OUT
+		private static void trace (Ray ray, Scene scene, int depth, out Vec3 result)
+		{
+			var nearest = Num.MaxValue;
+			Sphere obj = null;
+
+			// search the scene for nearest intersection
+			foreach(var o in scene.Objects)
+			{
+				var distance = Num.MaxValue;
+				Sphere.Intersect(o, ray, out distance, out bool intersectResult);
+				if (intersectResult)
+				{
+					if (distance < nearest)
+					{
+						nearest = distance;
+						obj = o;
+					}
+				}
+			}
+
+			if (obj == null)
+			{
+				result = Vec3.Zero;
+				return;
+			}
+
+			Vec3.Mul(ray.Dir, nearest, out var mulResult);
+			Vec3.Add(ray.Org, mulResult, out var point_of_hit);
+			Sphere.Normal(obj, point_of_hit, out var normal);
+			bool inside = false;
+
+			Vec3.Dot(normal, ray.Dir, out Num dotResult);
+			if (dotResult > 0)
+			{
+				inside = true;
+				normal = -normal;
+			}
+
+			Vec3 color = Vec3.Zero;
+			var reflection_ratio = obj.Reflection;
+
+			foreach(var l in scene.Lights)
+			{
+				Vec3.Sub(l.Position, point_of_hit, out var subResult);
+				Vec3.Normalize(subResult, out var light_direction);
+				Ray r;
+				Vec3.Mul(normal, 1e-5f, out var mulResult2);
+				Vec3.Add(point_of_hit, mulResult2, out r.Org);
+				r.Dir = light_direction;
+
+				// go through the scene check whether we're blocked from the lights
+				bool blocked = false;
+				foreach (var o in scene.Objects)
+				{
+					Sphere.Intersect(o, r, out bool intersectResult);
+					if (intersectResult)
+					{
+						blocked = true;
+						break;
+					}
+				}
+
+				if (!blocked)
+				{
+					Vec3.Dot(normal, light_direction, out Num dotResult2);
+					Vec3.Mul(l.Color, Math.Max(0, dotResult2), out var colorMulResult);
+					Vec3.Mul(colorMulResult, obj.Color, out var colorMulResult2);
+					Vec3.Mul(colorMulResult2, (1.0f - reflection_ratio), out var colorMulResult3);
+					Vec3.Add(color, colorMulResult3, out color);
+				}
+			}
+
+			Vec3.Dot(ray.Dir, normal, out Num rayNormDot);
+			Num facing = Math.Max(0, -rayNormDot);
+			Num fresneleffect = reflection_ratio + ((1 - reflection_ratio) * (Num)Math.Pow((1 - facing), 5));
+
+			// compute reflection
+			if (depth < maxDepth && reflection_ratio > 0)
+			{
+				Vec3.Mul(normal, 2, out var normMulResult);
+				Vec3.Mul(normMulResult, rayNormDot, out var rayNormMulResult);
+				Vec3.Mul(rayNormMulResult, -1.0f, out var rayNormMulResult2);
+				Vec3.Add(ray.Dir, rayNormMulResult2, out var reflection_direction);
+				Ray r;
+				Vec3.Mul(normal, 1e-5f, out var mulResult2);
+				Vec3.Add(point_of_hit, mulResult2, out r.Org);
+				r.Dir = reflection_direction;
+				trace(r, scene, depth + 1, out var reflection);
+				Vec3.Mul(reflection, fresneleffect, out var colorMul);
+				Vec3.Add(color, colorMul, out color);
+			}
+
+			// compute refraction
+			if (depth < maxDepth && (obj.Transparency > 0))
+			{
+				var ior = 1.5f;
+				Vec3.Dot(ray.Dir, normal, out Num dotResult2);
+				var CE = dotResult2 * (-1.0f);
+				ior = inside ? (1.0f) / ior : ior;
+				var eta = (1.0f) / ior;
+				Vec3.Mul(normal, CE, out var ceMulResult);
+				Vec3.Add(ray.Dir, ceMulResult, out var ceAddResult);
+				Vec3.Mul(ceAddResult, eta, out var GF);
+				var sin_t1_2 = 1 - (CE * CE);
+				var sin_t2_2 = sin_t1_2 * (eta * eta);
+				if (sin_t2_2 < 1)
+				{
+					Vec3.Mul(normal, (Num)Math.Sqrt(1 - sin_t2_2), out var GC);
+					Vec3.Sub(GF, GC, out var refraction_direction);
+					Ray r;
+					Vec3.Mul(normal, 1e-4f, out var mulResult2);
+					Vec3.Sub(point_of_hit, mulResult2, out r.Org);
+					r.Dir = refraction_direction;
+					trace(r, scene, depth + 1, out var refraction);
+					Vec3.Mul(refraction, (1 - fresneleffect), out var refMulResult);
+					Vec3.Mul(refMulResult, obj.Transparency, out var mulResult4);
+					Vec3.Add(color, mulResult4, out color);
+				}
+			}
+
+			result = color;
+		}
+
+		public static byte[] Render(Scene scene, byte[] pixels)
+		{
+			var eye = Vec3.Zero;
+			Num h = (Num)Math.Tan(((fov / 360) * (2 * PI)) / 2) * 2;
+			Num w = h * Width / Height;
+
+			for (int y = 0; y != Height; ++y)
+			{
+				for (int x = 0; x != Width; ++x)
+				{
+					Num xx = x, yy = y, ww = Width, hh = Height;
+					Vec3 dir;
+					dir.X = ((xx - (ww / 2.0f)) / ww)  * w;
+					dir.Y = (((hh/2.0f) - yy) / hh) * h;
+					dir.Z = -1.0f;
+					Vec3.Normalize(dir, out dir);
+
+					Ray r;
+					r.Org = eye;
+					r.Dir = dir;
+					trace(r, scene, 0, out var pixel);
+					int i = (x*3) + (y*Width*3);
+					pixels[i] = (byte)Math.Min(pixel.X * 255, 255);
+					pixels[i+1] = (byte)Math.Min(pixel.Y * 255, 255);
+					pixels[i+2] = (byte)Math.Min(pixel.Z * 255, 255);
+				}
+			}
+
+			return pixels;
+		}
+		#else
 		private static Vec3 trace (Ray ray, Scene scene, int depth)
 		{
 			var nearest = Num.MaxValue;
@@ -336,6 +625,7 @@ namespace RayTraceBenchmark
 
 			return pixels;
 		}
+		#endif
 	}
 
 	// ==============================================
@@ -471,7 +761,7 @@ namespace RayTraceBenchmark
 			if (SaveImageCallback != null) SaveImageCallback(data);
 			#elif !JSIL
 			Console.ReadLine();
-			using (var file = new FileStream("Image.raw", FileMode.Create, FileAccess.Write))
+			using (var file = new FileStream("Image.rgb", FileMode.Create, FileAccess.Write))
 			using (var writer = new BinaryWriter(file))
 			{
 				for (int i = 0; i != pixelsLength; ++i)
