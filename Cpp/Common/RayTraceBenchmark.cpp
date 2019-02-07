@@ -22,7 +22,7 @@ using namespace std;
 #endif
 
 //#define BIT64
-#define USE_OUT
+//#define USE_OUT
 
 #if BIT64
 #define Num double

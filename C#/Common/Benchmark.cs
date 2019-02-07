@@ -1,5 +1,5 @@
 ﻿//#define BIT64
-#define USE_OUT
+//#define USE_OUT
 
 using System;
 using System.Runtime.InteropServices;
