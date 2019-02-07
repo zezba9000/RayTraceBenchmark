@@ -742,7 +742,7 @@ namespace RayTraceBenchmark
 
 			// save image
 #if !IOS
-			ofstream outfile ("Image.raw", ofstream::binary);
+			ofstream outfile ("Image.rgb", ofstream::binary);
 			outfile.write(data, pixelsLength);
 			outfile.close();
 #endif
