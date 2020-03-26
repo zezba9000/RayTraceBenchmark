@@ -37,6 +37,7 @@ public class MainUI : MonoBehaviour
 
 	private static Color32[] convertRGBToColor32(byte[] rgb)
 	{
+		// copy
 		var rgba = new Color32[rgb.Length/3];
 		for (int i = 0, i2 = 0; i != rgb.Length; i += 3, i2 += 1)
 		{
@@ -46,6 +47,7 @@ public class MainUI : MonoBehaviour
 			rgba[i2].a = 255;
 		}
 
+		// flip
 		for (int y = 0; y != 720; ++y)
 		for (int x = 0; x != 1280 / 2; ++x)
 		{
