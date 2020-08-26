@@ -1,0 +1,2 @@
+<< Start App >>
+.\adb.exe shell monkey -p com.zezba9000.RayTraceBenchmark -c android.intent.category.LAUNCHER 1
