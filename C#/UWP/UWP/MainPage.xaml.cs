@@ -44,7 +44,7 @@ namespace UWP
 
 		private void showImage(byte[] data)
 		{
-			var bitmap = new WriteableBitmap(1280, 720);
+			var bitmap = new WriteableBitmap(Benchmark.Width, Benchmark.Height);
 			var stream = bitmap.PixelBuffer.AsStream();
 			data = BenchmarkMain.ConvertRGBToBGRA(data);
 			stream.Write(data, 0, data.Length);

@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Reflection;
+using RayTraceBenchmark;
 
 public class MainUI : MonoBehaviour
 {
@@ -25,14 +26,14 @@ public class MainUI : MonoBehaviour
 
 		if (GUI.Button(new Rect(0, 0, 128, 64), "Start"))
 		{
-			var pixels = RayTraceBenchmark.BenchmarkMain.Start();
-			var texture = new Texture2D(1280, 720, TextureFormat.RGBA32, false);
+			var pixels = BenchmarkMain.Start();
+			var texture = new Texture2D(Benchmark.Width, Benchmark.Height, TextureFormat.RGBA32, false);
 			texture.SetPixels32(convertRGBToColor32(pixels));
 			texture.Apply();
 			this.GetComponent<Renderer>().material.mainTexture = texture;
 		}
 
-		GUI.Label(new Rect(0, 80, 128, 32), RayTraceBenchmark.BenchmarkMain.TimeToComplete);
+		GUI.Label(new Rect(0, 80, 128, 32), BenchmarkMain.TimeToComplete);
 	}
 
 	private static Color32[] convertRGBToColor32(byte[] rgb)
@@ -48,13 +49,13 @@ public class MainUI : MonoBehaviour
 		}
 
 		// flip
-		for (int y = 0; y != 720; ++y)
-		for (int x = 0; x != 1280 / 2; ++x)
+		for (int y = 0; y != Benchmark.Height; ++y)
+		for (int x = 0; x != Benchmark.Width / 2; ++x)
 		{
-			int i = x + (y * 1280);
+			int i = x + (y * Benchmark.Width);
 
-			int x2 = (1280 - 1) - x;
-			int i2 = x2 + (y * 1280);
+			int x2 = (Benchmark.Width - 1) - x;
+			int i2 = x2 + (y * Benchmark.Width);
 
 			var prev = rgba[i2];
 			rgba[i2] = rgba[i];

@@ -1,5 +1,9 @@
 ﻿//#define BIT64
 
+#if UNITY_2017_1_OR_NEWER
+#define UNITY3D
+#endif
+
 using System;
 using System.Runtime.InteropServices;
 using System.IO;
@@ -15,7 +19,11 @@ using Num = System.Double;
 using MATH = System.Math;
 #else
 using Num = System.Single;
+#if UNITY3D
+using MATH = UnityEngine.Mathf;
+#else
 using MATH = System.MathF;
+#endif
 #endif
 
 #if NET5
@@ -109,7 +117,7 @@ namespace RayTraceBenchmark
 		public Num Reflection;
 		public Num Transparency;
 
-		public Sphere(Vec3 c, Num r, Vec3 clr, Num refl = 0, Num trans = 0)
+		public Sphere(Vec3 c, Num r, Vec3 clr, Num refl, Num trans)
 		{
 			Center = c;
 			Radius = r;
@@ -418,7 +426,9 @@ namespace RayTraceBenchmark
 		}
 		#endif
 
-		#if JSIL
+		public static string TimeToComplete;
+
+		#if JSIL || UNITY3D
 		public static byte[] Start()
 		#else
 		public static void Start()
@@ -428,10 +438,10 @@ namespace RayTraceBenchmark
 			var scene = new Scene();
 			scene.Objects = new Sphere[]
 			{
-				new Sphere(new Vec3(0.0f, -10002.0f, -20.0f), 10000, new Vec3(.8f, .8f, .8f)),
-				new Sphere(new Vec3(0.0f, 2.0f, -20.0f), 4, new Vec3(.8f, .5f, .5f), 0.5f),
-				new Sphere(new Vec3(5.0f, 0.0f, -15.0f), 2, new Vec3(.3f, .8f, .8f), 0.2f),
-				new Sphere(new Vec3(-5.0f, 0.0f, -15.0f), 2, new Vec3(.3f, .5f, .8f), 0.2f),
+				new Sphere(new Vec3(0.0f, -10002.0f, -20.0f), 10000, new Vec3(.8f, .8f, .8f), 0, 0),
+				new Sphere(new Vec3(0.0f, 2.0f, -20.0f), 4, new Vec3(.8f, .5f, .5f), 0.5f, 0),
+				new Sphere(new Vec3(5.0f, 0.0f, -15.0f), 2, new Vec3(.3f, .8f, .8f), 0.2f, 0),
+				new Sphere(new Vec3(-5.0f, 0.0f, -15.0f), 2, new Vec3(.3f, .5f, .8f), 0.2f, 0),
 				new Sphere(new Vec3(-2.0f, -1.0f, -10.0f), 1, new Vec3(.1f, .1f, .1f), 0.1f, 0.8f)
 			};
 
@@ -457,7 +467,8 @@ namespace RayTraceBenchmark
 			watch.Start();
 			var data = Benchmark.Render(scene, pixels);
 			watch.Stop();
-			Console.WriteLine("Sec: " + (watch.ElapsedMilliseconds / 1000d));
+			TimeToComplete = "Sec: " + (watch.ElapsedMilliseconds / 1000d).ToString();
+			Console.WriteLine(TimeToComplete);
 
 			#if WIN32
 			Win32EndOptimizedStopwatch();
@@ -467,8 +478,8 @@ namespace RayTraceBenchmark
 			// save image
 			#if UWP || WIN8 || WP8 || WP7 || ANDROID || IOS || VITA
 			if (SaveImageCallback != null) SaveImageCallback(data);
-			#elif !JSIL
-			Console.ReadLine();
+			#elif !JSIL && !UNITY3D
+			/*Console.ReadLine();
 			using (var file = new FileStream("Image.rgb", FileMode.Create, FileAccess.Write))
 			using (var writer = new BinaryWriter(file))
 			{
@@ -476,7 +487,7 @@ namespace RayTraceBenchmark
 				{
 					file.WriteByte(data[i]);
 				}
-			}
+			}*/
 			#else
 			return pixels;
 			#endif
