@@ -1,3 +1,7 @@
+#if defined(WIN32_GCC) || defined(WIN32_CLANG)
+#undef WIN32
+#endif
+
 #ifdef WIN32
 #include "../RayTraceBenchmark/RayTraceBenchmark/stdafx.h"
 #include <Windows.h>
@@ -382,37 +386,9 @@ namespace RayTraceBenchmark
 	// ==============================================
 	// Prep Code
 	// ==============================================
-	#ifdef WIN32
-	TIMECAPS caps;
-	#endif
-
 	class BenchmarkMain
 	{
 	public:
-		#ifdef WIN32
-		static void Win32OptimizedStopwatch()
-		{
-			caps = TIMECAPS();
-			if (timeGetDevCaps(&caps, sizeof(TIMECAPS)) != 0)
-			{
-				cout << "StopWatch: TimeGetDevCaps failed";
-			}
-			
-			if (timeBeginPeriod(caps.wPeriodMin) != 0)
-			{
-				cout << "StopWatch: TimeBeginPeriod failed";
-			}
-		}
-
-		static void Win32EndOptimizedStopwatch()
-		{
-			if (timeEndPeriod(caps.wPeriodMin) != 0)
-			{
-				cout << "StopWatch: TimeEndPeriod failed";
-			}
-		}
-		#endif
-
 		static double Start()
 		{
 			// create objects
@@ -443,18 +419,10 @@ namespace RayTraceBenchmark
 			cout << "Starting test..." << endl;
 
 			// run test
-			#if WIN32
-			Win32OptimizedStopwatch();
-			#endif
-
 			unsigned int start = clock();
 			auto data = Benchmark::Render(*scene, pixels);
             double sec = ((clock()-start) / (double)CLOCKS_PER_SEC);
 			cout << "Sec: " << sec << endl;
-
-			#if WIN32
-			Win32EndOptimizedStopwatch();
-			#endif
 
 			//return sec;
 			// save image
