@@ -292,12 +292,12 @@ namespace RayTraceBenchmark
 
 				if (!blocked)
 				{
-					color += l->Color * max(0, Vec3::Dot(normal, light_direction)) * obj->Color * (1 - reflection_ratio);
+					color += l->Color * max(0.0f, Vec3::Dot(normal, light_direction)) * obj->Color * (1 - reflection_ratio);
 				}
 			}
 
 			auto rayNormDot = Vec3::Dot(ray.Dir, normal);
-			Num facing = max(0, -rayNormDot);
+			Num facing = max(0.0f, -rayNormDot);
 			Num fresneleffect = reflection_ratio + ((1 - reflection_ratio) * POW((1 - facing), 5));
 
 			// compute reflection
@@ -369,9 +369,9 @@ namespace RayTraceBenchmark
 					r.Dir = dir;
 					auto pixel = trace(r, scene, 0);
 					int i = (x * 3) + (y * Width * 3);
-					pixels[i] = min(pixel.X * 255, 255);
-					pixels[i+1] = min(pixel.Y * 255, 255);
-					pixels[i+2] = min(pixel.Z * 255, 255);
+					pixels[i] = min(pixel.X * 255.0f, 255.0f);
+					pixels[i+1] = min(pixel.Y * 255.0f, 255.0f);
+					pixels[i+2] = min(pixel.Z * 255.0f, 255.0f);
 				}
 			}
 
