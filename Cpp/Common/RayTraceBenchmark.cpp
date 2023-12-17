@@ -38,6 +38,7 @@ using namespace std;
 #endif
 
 #define INLINE inline
+//#define INLINE
 
 namespace RayTraceBenchmark
 {

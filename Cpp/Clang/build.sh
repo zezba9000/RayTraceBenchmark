@@ -1,1 +1,1 @@
-clang++ -O3 -flto -march=native -mtune=native ../Common/RayTraceBenchmark.cpp -o ./bin/RayTraceBenchmark
+clang++ -O3 ../Common/RayTraceBenchmark.cpp -o ./bin/RayTraceBenchmark
