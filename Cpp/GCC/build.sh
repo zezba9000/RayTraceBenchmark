@@ -1,0 +1,1 @@
+g++ -O3 -flto -march=native -mtune=native ../Common/RayTraceBenchmark.cpp -o ./bin/RayTraceBenchmark
