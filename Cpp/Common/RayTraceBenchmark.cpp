@@ -33,6 +33,8 @@ using namespace std;
 #define MAX_FT FLT_MAX
 #endif
 
+#define INLINE inline
+
 namespace RayTraceBenchmark
 {
 	// ==============================================
@@ -57,11 +59,13 @@ namespace RayTraceBenchmark
 			Z = z;
 		}
 
+		INLINE
 		Vec3 operator+(const Vec3& p)
 		{
 			return Vec3(X + p.X, Y + p.Y, Z + p.Z);
 		}
 
+		INLINE
 		void operator+=(const Vec3& p)
 		{
 			this->X += p.X;
@@ -69,46 +73,55 @@ namespace RayTraceBenchmark
 			this->Z += p.Z;
 		}
 
+		INLINE
 		Vec3 operator-(const Vec3& p)
 		{
 			return Vec3(X - p.X, Y - p.Y, Z - p.Z);
 		}
 
+		INLINE
 		Vec3 operator-()
 		{
 			return Vec3(-X, -Y, -Z);
 		}
 
+		INLINE
 		Vec3 operator*(const Vec3& p)
 		{
 			return Vec3(X * p.X, Y * p.Y, Z * p.Z);
 		}
 
+		INLINE
 		Vec3 operator*(const float p)
 		{
 			return Vec3(X * p, Y * p, Z * p);
 		}
 
+		INLINE
 		Vec3 operator/(const Vec3& p)
 		{
 			return Vec3(X / p.X, Y / p.Y, Z / p.Z);
 		}
 
+		INLINE
 		Vec3 operator/(const float p)
 		{
 			return Vec3(X / p, Y / p, Z / p);
 		}
 
+		INLINE
 		static Num Dot(Vec3 v1, Vec3 v2)
 		{
 			return (v1.X*v2.X) + (v1.Y*v2.Y) + (v1.Z*v2.Z);
 		}
 
+		INLINE
 		static Num Magnitude(Vec3 v)
 		{
 			return SQRT((v.X*v.X) + (v.Y*v.Y) + (v.Z*v.Z));
 		}
 
+		INLINE
 		static Vec3 Normalize(Vec3 v)
 		{
 			return v / SQRT((v.X*v.X) + (v.Y*v.Y) + (v.Z*v.Z));
@@ -207,8 +220,8 @@ namespace RayTraceBenchmark
 	class Benchmark
 	{
 	public:
-		#define Width (1280 * 8)
-		#define Height (720 * 8)
+		#define Width (1280 * 16)
+		#define Height (720 * 16)
 		#ifdef BIT64
 		#define fov 45.0
 		#define PI 3.1415926535897932384626433832795

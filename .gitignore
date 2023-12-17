@@ -12,6 +12,7 @@ Library/
 TEMP/
 Help/
 .vs/
+packages/
 
 # SLN
 *.db

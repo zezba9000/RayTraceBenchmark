@@ -1,17 +1,23 @@
 ﻿//#define BIT64
+//#define SIMD
+#define INLINE
 
 #if UNITY_2017_1_OR_NEWER
 #define UNITY3D
 #endif
 
 using System;
-using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 #if !JSIL
 using System.Threading;
+#endif
+
+#if SIMD
+using Vec3 = System.Numerics.Vector3;
 #endif
 
 #if BIT64
@@ -21,6 +27,26 @@ using MATH = System.Math;
 using Num = System.Single;
 #if UNITY3D
 using MATH = UnityEngine.Mathf;
+#elif NETFW
+static class MATH
+{
+	public const float PI = 3.1415926535897931f;
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static float Sqrt(float x) => (float)Math.Sqrt(x);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static float Min(float x, float y) => (float)Math.Min(x, y);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static float Max(float x, float y) => (float)Math.Max(x, y);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static float Pow(float x, float y) => (float)Math.Pow(x, y);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static float Tan(float x) => (float)Math.Tan(x);
+}
 #else
 using MATH = System.MathF;
 #endif
@@ -34,6 +60,7 @@ namespace RayTraceBenchmark
 	// ==============================================
 	// Main Benchmark Code
 	// ==============================================
+	#if !SIMD
 	struct Vec3
 	{
 		public Num X, Y, Z;
@@ -47,61 +74,95 @@ namespace RayTraceBenchmark
 			Z = z;
 		}
 
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Vec3 operator +(Vec3 p1, Vec3 p2)
 		{
 			return new Vec3(p1.X + p2.X, p1.Y + p2.Y, p1.Z + p2.Z);
 		}
 
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Vec3 operator -(Vec3 p1, Vec3 p2)
 		{
 			return new Vec3(p1.X - p2.X, p1.Y - p2.Y, p1.Z - p2.Z);
 		}
 		
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Vec3 operator-(Vec3 p1)
 		{
 			return new Vec3(-p1.X, -p1.Y, -p1.Z);
 		}
 
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Vec3 operator*(Vec3 p1, Vec3 p2)
 		{
 			return new Vec3(p1.X * p2.X, p1.Y * p2.Y, p1.Z * p2.Z);
 		}
 
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Vec3 operator*(Vec3 p1, Num p2)
 		{
 			return new Vec3(p1.X * p2, p1.Y * p2, p1.Z * p2);
 		}
 
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Vec3 operator*(Num p1, Vec3 p2)
 		{
 			return new Vec3(p1 * p2.X, p1 * p2.Y, p1 * p2.Z);
 		}
 
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Vec3 operator/(Vec3 p1, Vec3 p2)
 		{
 			return new Vec3(p1.X / p2.X, p1.Y / p2.Y, p1.Z / p2.Z);
 		}
 
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Vec3 operator/(Vec3 p1, Num p2)
 		{
 			return new Vec3(p1.X / p2, p1.Y / p2, p1.Z / p2);
 		}
 
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Num Dot(Vec3 v1, Vec3 v2)
 		{
 			return (v1.X*v2.X) + (v1.Y*v2.Y) + (v1.Z*v2.Z);
 		}
 
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Num Magnitude(Vec3 v)
 		{
 			return MATH.Sqrt((v.X*v.X) + (v.Y*v.Y) + (v.Z*v.Z));
 		}
 
+		#if INLINE
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		#endif
 		public static Vec3 Normalize(Vec3 v)
 		{
 			return v / MATH.Sqrt((v.X*v.X) + (v.Y*v.Y) + (v.Z*v.Z));
 		}
 	}
+	#endif
 
 	struct Ray
 	{
@@ -109,7 +170,7 @@ namespace RayTraceBenchmark
 		public Vec3 Dir;
 	}
 
-	class Sphere
+	sealed class Sphere
 	{
 		public Vec3 Center;
 		public Num Radius;
@@ -169,7 +230,7 @@ namespace RayTraceBenchmark
 		}
 	}
 
-	class Light
+	sealed class Light
 	{
 		public Vec3 Position;
 		public Vec3 Color;
@@ -181,7 +242,7 @@ namespace RayTraceBenchmark
 		}
 	}
 
-	class Scene
+	sealed class Scene
 	{
 		public Sphere[] Objects;
 		public Light[] Lights;
@@ -189,8 +250,8 @@ namespace RayTraceBenchmark
 
 	static class Benchmark
 	{
-		public const int Width = 1280 * 8;
-		public const int Height = 720 * 8;
+		public const int Width = 1280 * 16;
+		public const int Height = 720 * 16;
 		private const Num fov = 45;
 		private const Num PI = MATH.PI;
 		private const int maxDepth = 6;
@@ -374,48 +435,6 @@ namespace RayTraceBenchmark
 
 	static class BenchmarkMain
 	{
-		#if WIN32
-		[StructLayout(LayoutKind.Sequential)]
-		public struct TimeCaps
-		{
-			public uint wPeriodMin;
-			public uint wPeriodMax;
-		}
-
-		private static TimeCaps caps;
-
-		[DllImport("winmm.dll", EntryPoint="timeGetDevCaps", SetLastError=true)]
-		public static extern uint TimeGetDevCaps(ref TimeCaps timeCaps, uint sizeTimeCaps);
-
-		[DllImport("winmm.dll", EntryPoint="timeBeginPeriod", SetLastError=true)]
-		public static extern uint TimeBeginPeriod(uint uMilliseconds);
-
-		[DllImport("winmm.dll", EntryPoint="timeEndPeriod", SetLastError=true)]
-		public static extern uint TimeEndPeriod(uint uMilliseconds);
-
-		public static void Win32OptimizedStopwatch()
-		{
-			caps = new TimeCaps();
-			if (TimeGetDevCaps(ref caps, (uint)System.Runtime.InteropServices.Marshal.SizeOf(caps)) != 0)
-			{
-				Console.WriteLine("StopWatch: TimeGetDevCaps failed");
-			}
-			
-			if (TimeBeginPeriod(caps.wPeriodMin) != 0)
-			{
-				Console.WriteLine("StopWatch: TimeBeginPeriod failed");
-			}
-		}
-
-		public static void Win32EndOptimizedStopwatch()
-		{
-			if (TimeEndPeriod(caps.wPeriodMin) != 0)
-			{
-				Console.WriteLine("StopWatch: TimeEndPeriod failed");
-			}
-		}
-		#endif
-
 		#if UWP || WIN8 || WP8 || WP7 || ANDROID || IOS || VITA
 		public delegate void SaveImageCallbackMethod(byte[] data);
 		public static SaveImageCallbackMethod SaveImageCallback;
@@ -459,10 +478,6 @@ namespace RayTraceBenchmark
 			Console.WriteLine("Starting test...");
 
 			// run test
-			#if WIN32
-			Win32OptimizedStopwatch();
-			#endif
-
 			var watch = new Stopwatch();
 			watch.Start();
 			var data = Benchmark.Render(scene, pixels);
@@ -470,16 +485,12 @@ namespace RayTraceBenchmark
 			TimeToComplete = "Sec: " + (watch.ElapsedMilliseconds / 1000d).ToString();
 			Console.WriteLine(TimeToComplete);
 
-			#if WIN32
-			Win32EndOptimizedStopwatch();
-			#endif
-
-			//return;
+			return;
 			// save image
 			#if UWP || WIN8 || WP8 || WP7 || ANDROID || IOS || VITA
 			if (SaveImageCallback != null) SaveImageCallback(data);
 			#elif !JSIL && !UNITY3D
-			/*Console.ReadLine();
+			Console.ReadLine();
 			using (var file = new FileStream("Image.rgb", FileMode.Create, FileAccess.Write))
 			using (var writer = new BinaryWriter(file))
 			{
@@ -487,7 +498,7 @@ namespace RayTraceBenchmark
 				{
 					file.WriteByte(data[i]);
 				}
-			}*/
+			}
 			#else
 			return pixels;
 			#endif
