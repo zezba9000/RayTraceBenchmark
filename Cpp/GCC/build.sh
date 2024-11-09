@@ -1,2 +1,2 @@
 mkdir bin
-g++ -O3 -flto ../Common/RayTraceBenchmark.cpp -o ./bin/RayTraceBenchmark
+g++ -std=c++11 -O3 -flto ../Common/RayTraceBenchmark.cpp -o ./bin/RayTraceBenchmark
