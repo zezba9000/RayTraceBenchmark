@@ -40,6 +40,9 @@ using namespace std;
 #define INLINE inline
 //#define INLINE
 
+//#define RESTRICT __restrict
+#define RESTRICT
+
 namespace RayTraceBenchmark
 {
 	// ==============================================
@@ -65,13 +68,13 @@ namespace RayTraceBenchmark
 		}
 
 		INLINE
-		Vec3 operator+(const Vec3& p)
+		Vec3 operator+(const Vec3& RESTRICT p)
 		{
 			return Vec3(X + p.X, Y + p.Y, Z + p.Z);
 		}
 
 		INLINE
-		void operator+=(const Vec3& p)
+		void operator+=(const Vec3& RESTRICT p)
 		{
 			this->X += p.X;
 			this->Y += p.Y;
@@ -79,7 +82,7 @@ namespace RayTraceBenchmark
 		}
 
 		INLINE
-		Vec3 operator-(const Vec3& p)
+		Vec3 operator-(const Vec3& RESTRICT p)
 		{
 			return Vec3(X - p.X, Y - p.Y, Z - p.Z);
 		}
@@ -91,7 +94,7 @@ namespace RayTraceBenchmark
 		}
 
 		INLINE
-		Vec3 operator*(const Vec3& p)
+		Vec3 operator*(const Vec3& RESTRICT p)
 		{
 			return Vec3(X * p.X, Y * p.Y, Z * p.Z);
 		}
@@ -103,7 +106,7 @@ namespace RayTraceBenchmark
 		}
 
 		INLINE
-		Vec3 operator/(const Vec3& p)
+		Vec3 operator/(const Vec3& RESTRICT p)
 		{
 			return Vec3(X / p.X, Y / p.Y, Z / p.Z);
 		}
@@ -158,12 +161,12 @@ namespace RayTraceBenchmark
 			Transparency = trans;
 		}
 
-		static Vec3 Normal(Sphere& sphere, Vec3 pos)
+		static Vec3 Normal(Sphere& RESTRICT sphere, Vec3 pos)
 		{
 			return Vec3::Normalize(pos - sphere.Center);
 		}
 
-		static bool Intersect(Sphere& sphere, Ray ray)
+		static bool Intersect(Sphere& RESTRICT sphere, Ray ray)
 		{
 			auto l = sphere.Center - ray.Org;
 			auto a = Vec3::Dot(l, ray.Dir);
@@ -178,9 +181,9 @@ namespace RayTraceBenchmark
 			return true;
 		}
 
-		static bool Intersect(Sphere& sphere, Ray ray, Num* distance)
+		static bool Intersect(Sphere& RESTRICT sphere, Ray ray, Num* RESTRICT distance)
 		{
-			*distance = 0;
+			*distance = NULL;
 
 			auto l = sphere.Center - ray.Org;
 			auto a = Vec3::Dot(l, ray.Dir);
@@ -218,8 +221,8 @@ namespace RayTraceBenchmark
 	{
 	public:
 		int ObjectCount, LightCount;
-		Sphere** Objects;
-		Light** Lights;
+		Sphere** RESTRICT Objects;
+		Light** RESTRICT Lights;
 	};
 
 	class Benchmark
@@ -236,10 +239,10 @@ namespace RayTraceBenchmark
 		#endif
 		#define maxDepth 6
 
-		static Vec3 trace (Ray ray, const Scene& scene, int depth)
+		static Vec3 trace (Ray ray, const Scene& RESTRICT scene, int depth)
 		{
 			Num nearest = MAX_FT;
-			Sphere* obj = 0;
+			Sphere* RESTRICT obj = NULL;
 
 			// search the scene for nearest intersection
 			for (int i = 0; i != scene.ObjectCount; ++i)
@@ -256,7 +259,7 @@ namespace RayTraceBenchmark
 				}
 			}
 
-			if (obj == 0) return Vec3();
+			if (obj == NULL) return Vec3();
 
 			auto point_of_hit = ray.Org + (ray.Dir * nearest);
 			auto normal = Sphere::Normal(*obj, point_of_hit);
@@ -352,7 +355,7 @@ namespace RayTraceBenchmark
 			return color;
 		}
 
-		static char* Render(Scene& scene, char* pixels)
+		static char* Render(Scene& RESTRICT scene, char* RESTRICT pixels)
 		{
 			auto eye = Vec3();
 			Num h = TAN(((fov / 360) * (2 * PI)) / 2) * 2;
@@ -395,7 +398,7 @@ namespace RayTraceBenchmark
 			// create objects
 			auto scene = new Scene();
 			scene->ObjectCount = 5;
-			scene->Objects = new Sphere*[5]
+			scene->Objects = new Sphere* RESTRICT [5]
 			{
 				new Sphere(Vec3(0.0f, -10002.0f, -20.0f), 10000, Vec3(.8f, .8f, .8f)),
 				new Sphere(Vec3(0.0f, 2.0f, -20.0f), 4, Vec3(.8f, .5f, .5f), 0.5f),
@@ -408,7 +411,7 @@ namespace RayTraceBenchmark
 			scene->Lights = new Light*[1]{new Light(Vec3(-10, 20, 30), Vec3(2, 2, 2))};
 			
 			int pixelsLength = Width * Height * 3;
-			char* pixels = new char[pixelsLength];
+			char* RESTRICT pixels = new char[pixelsLength];
 
 			// give the system a little time
 			cout << "Give the system a little time..." << endl;
